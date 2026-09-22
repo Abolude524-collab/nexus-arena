@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: nexus-arena
+    env: node
+    region: oregon
+    buildCommand: npm run build && npx prisma db push --schema=apps/server/prisma/schema.prisma
+    startCommand: node apps/server/dist/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        value: file:./dev.db
