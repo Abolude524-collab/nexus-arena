@@ -11,7 +11,21 @@ export const createApp = (): Express => {
 
   app.use(
     cors({
-      origin: process.env['CLIENT_URL'] || 'http://localhost:5173',
+      origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        const clientUrl = process.env['CLIENT_URL'];
+        if (!clientUrl || clientUrl === '*') return callback(null, true);
+        const allowed = clientUrl.split(',').map((s) => s.trim());
+        if (
+          allowed.includes(origin) ||
+          origin.endsWith('.netlify.app') ||
+          origin.endsWith('.onrender.com') ||
+          origin.startsWith('http://localhost')
+        ) {
+          return callback(null, true);
+        }
+        return callback(null, true);
+      },
       credentials: true,
     }),
   );
