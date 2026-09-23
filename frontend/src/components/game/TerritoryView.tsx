@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Shield, Clock, Trophy, Gamepad2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Shield, Clock, Trophy, Gamepad2 } from 'lucide-react';
 import { TerritoryGameState } from '../../shared/index.js';
 import { socketService } from '../../services/socket.service';
 import { useAuthStore } from '../../store/authStore';
+import { VirtualDPad } from './VirtualDPad';
 
 interface TerritoryViewProps {
   gameState: TerritoryGameState;
@@ -105,31 +106,31 @@ export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
   const sortedPlayers = [...gameState.players].sort((a, b) => b.score - a.score);
 
   return (
-    <div className="fixed inset-0 z-50 bg-nexus-bg flex flex-col justify-between p-4 overflow-hidden selection:bg-none font-sans">
+    <div className="fixed inset-0 z-50 bg-nexus-bg flex flex-col justify-between p-2 md:p-4 overflow-hidden selection:bg-none font-sans">
       {/* Top HUD */}
-      <div className="flex items-center justify-between bg-nexus-surface/90 border border-nexus-border backdrop-blur px-6 py-3 rounded-card z-10">
-        <div className="flex items-center gap-6">
-          <div className="font-heading font-extrabold text-xl text-white tracking-wider flex items-center gap-2">
-            <Shield className="w-6 h-6 text-nexus-accent animate-pulse" />
+      <div className="flex items-center justify-between bg-nexus-surface/90 border border-nexus-border backdrop-blur px-3 md:px-6 py-2 md:py-3 rounded-card z-10">
+        <div className="flex items-center gap-3 md:gap-6">
+          <div className="font-heading font-extrabold text-base md:text-xl text-white tracking-wider flex items-center gap-1.5">
+            <Shield className="w-5 h-5 md:w-6 md:h-6 text-nexus-accent animate-pulse" />
             <span className="text-nexus-accent">TERRITORY</span> CLASH
           </div>
-          <div className="flex items-center gap-2 font-mono text-sm bg-nexus-card px-3 py-1.5 rounded-btn border border-nexus-border">
-            <Clock className="w-4 h-4 text-nexus-cyan" />
-            <span className="text-nexus-muted">TIME:</span>
+          <div className="flex items-center gap-1.5 md:gap-2 font-mono text-xs md:text-sm bg-nexus-card px-2.5 md:px-3 py-1 md:py-1.5 rounded-btn border border-nexus-border">
+            <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-nexus-cyan" />
+            <span className="text-nexus-muted hidden sm:inline">TIME:</span>
             <span className="text-white font-bold">{timerStr}</span>
           </div>
         </div>
 
         {/* Player Stats */}
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-nexus-card px-4 py-1.5 rounded-btn border border-nexus-border font-mono text-xs">
+        <div className="flex items-center gap-2 md:gap-4">
+          <div className="hidden sm:flex items-center gap-2 bg-nexus-card px-3 md:px-4 py-1 md:py-1.5 rounded-btn border border-nexus-border font-mono text-xs">
             <span className="text-nexus-muted">CONTROLLED:</span>
-            <span className="text-nexus-cyan font-bold text-base">{myPlayer?.territoriesControlled || 0} CELLS</span>
+            <span className="text-nexus-cyan font-bold text-sm md:text-base">{myPlayer?.territoriesControlled || 0} CELLS</span>
           </div>
-          <div className="flex items-center gap-2 bg-nexus-card px-5 py-1.5 rounded-btn border border-nexus-accent glow-accent font-mono">
-            <Trophy className="w-5 h-5 text-amber-400" />
-            <span className="text-nexus-muted text-xs">YOUR SCORE:</span>
-            <span className="text-white font-heading font-extrabold text-2xl">
+          <div className="flex items-center gap-1.5 md:gap-2 bg-nexus-card px-3 md:px-5 py-1 md:py-1.5 rounded-btn border border-nexus-accent glow-accent font-mono">
+            <Trophy className="w-4 h-4 md:w-5 md:h-5 text-amber-400" />
+            <span className="text-nexus-muted text-[10px] md:text-xs hidden sm:inline">YOUR SCORE:</span>
+            <span className="text-white font-heading font-extrabold text-lg md:text-2xl">
               {myPlayer?.score || 0}
             </span>
           </div>
@@ -209,24 +210,25 @@ export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
         </div>
       </div>
 
-      {/* Mobile Touch Controls */}
-      <div className="md:hidden flex items-center justify-center gap-3 py-2">
-        <button onClick={() => sendInput({ ...keys, left: true })} className="p-3 rounded-btn bg-nexus-card border border-nexus-border text-white"><ArrowLeft className="w-5 h-5" /></button>
-        <div className="flex flex-col gap-2">
-          <button onClick={() => sendInput({ ...keys, up: true })} className="p-3 rounded-btn bg-nexus-card border border-nexus-border text-white"><ArrowUp className="w-5 h-5" /></button>
-          <button onClick={() => sendInput({ ...keys, down: true })} className="p-3 rounded-btn bg-nexus-card border border-nexus-border text-white"><ArrowDown className="w-5 h-5" /></button>
-        </div>
-        <button onClick={() => sendInput({ ...keys, right: true })} className="p-3 rounded-btn bg-nexus-card border border-nexus-border text-white"><ArrowRight className="w-5 h-5" /></button>
+      {/* Mobile Virtual D-Pad Overlay */}
+      <div className="md:hidden fixed bottom-14 left-4 z-40 opacity-90 active:opacity-100">
+        <VirtualDPad
+          onDirectionChange={(newKeys) => {
+            setKeys(newKeys);
+            sendInput(newKeys);
+          }}
+        />
       </div>
 
       {/* Bottom HUD info */}
-      <div className="hidden md:flex items-center justify-between bg-nexus-surface/80 border border-nexus-border px-6 py-2 rounded-btn font-mono text-xs text-nexus-muted">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between bg-nexus-surface/80 border border-nexus-border px-3 md:px-6 py-1.5 md:py-2 rounded-btn font-mono text-[11px] md:text-xs text-nexus-muted">
+        <div className="flex items-center gap-2 md:gap-3">
           <Gamepad2 className="w-4 h-4 text-nexus-cyan" />
-          <span>CONTROLS: <strong className="text-white">WASD</strong> OR <strong className="text-white">ARROWS</strong> TO MOVE ON 10×10 GRID</span>
+          <span className="hidden md:inline">CONTROLS: <strong className="text-white">WASD</strong> OR <strong className="text-white">ARROWS</strong> TO MOVE ON 10×10 GRID</span>
+          <span className="md:hidden text-nexus-cyan font-bold">TOUCH D-PAD TO MOVE</span>
         </div>
-        <div>
-          SCORING: <span className="text-nexus-cyan">CAPTURE (+100)</span> • <span className="text-nexus-accent">CONTROL (+10/sec)</span> • <span className="text-amber-400">DEFEND (+25)</span>
+        <div className="text-[10px] md:text-xs">
+          SCORING: <span className="text-nexus-cyan">CAPTURE (+100)</span> • <span className="text-nexus-accent">CONTROL (+10/s)</span>
         </div>
       </div>
     </div>

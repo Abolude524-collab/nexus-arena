@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Trophy, Clock, Gamepad2 } from 'lucide-react';
 import { useGameStore } from '../../store/gameStore';
 import { useAuthStore } from '../../store/authStore';
@@ -8,6 +8,7 @@ import { MatchResultsModal } from './MatchResultsModal';
 import { ReactionRushView } from './ReactionRushView';
 import { TerritoryView } from './TerritoryView';
 import { WordBlitzView } from './WordBlitzView';
+import { VirtualDPad } from './VirtualDPad';
 
 export const GameView: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -162,29 +163,37 @@ export const GameView: React.FC = () => {
   const remainingSeconds = gameState ? Math.max(0, Math.ceil(((gameState.endsAt || 0) - now) / 1000)) : 0;
   const mins = Math.floor(remainingSeconds / 60);
   const secs = remainingSeconds % 60;
+  const handleVirtualDpadChange = useCallback(
+    (newKeys: { up: boolean; down: boolean; left: boolean; right: boolean }) => {
+      setKeys(newKeys);
+      sendInput(newKeys);
+    },
+    [sendInput]
+  );
+
   const timerStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 
   return (
-    <div className="fixed inset-0 z-50 bg-nexus-bg flex flex-col justify-between p-4 overflow-hidden selection:bg-none">
+    <div className="fixed inset-0 z-50 bg-nexus-bg flex flex-col justify-between p-2 md:p-4 overflow-hidden selection:bg-none">
       {/* Top HUD */}
-      <div className="flex items-center justify-between bg-nexus-surface/90 border border-nexus-border backdrop-blur px-6 py-3 rounded-card z-10">
-        <div className="flex items-center gap-6">
-          <div className="font-heading font-extrabold text-xl text-white tracking-wider flex items-center gap-2">
+      <div className="flex items-center justify-between bg-nexus-surface/90 border border-nexus-border backdrop-blur px-3 md:px-6 py-2 md:py-3 rounded-card z-10">
+        <div className="flex items-center gap-3 md:gap-6">
+          <div className="font-heading font-extrabold text-base md:text-xl text-white tracking-wider flex items-center gap-1.5">
             <span className="text-nexus-cyan">NEON</span> DASH
           </div>
-          <div className="flex items-center gap-2 font-mono text-sm bg-nexus-card px-3 py-1.5 rounded-btn border border-nexus-border">
-            <Clock className="w-4 h-4 text-nexus-cyan" />
-            <span className="text-nexus-muted">TIME:</span>
+          <div className="flex items-center gap-1.5 md:gap-2 font-mono text-xs md:text-sm bg-nexus-card px-2.5 md:px-3 py-1 md:py-1.5 rounded-btn border border-nexus-border">
+            <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-nexus-cyan" />
+            <span className="text-nexus-muted hidden sm:inline">TIME:</span>
             <span className="text-white font-bold">{timerStr}</span>
           </div>
         </div>
 
         {/* My Score Display */}
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-nexus-card px-5 py-1.5 rounded-btn border border-nexus-accent glow-accent font-mono">
-            <Trophy className="w-5 h-5 text-amber-400" />
-            <span className="text-nexus-muted text-xs">YOUR SCORE:</span>
-            <span className="text-white font-heading font-extrabold text-2xl">
+        <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center gap-1.5 md:gap-2 bg-nexus-card px-3 md:px-5 py-1 md:py-1.5 rounded-btn border border-nexus-accent glow-accent font-mono">
+            <Trophy className="w-4 h-4 md:w-5 md:h-5 text-amber-400" />
+            <span className="text-nexus-muted text-[10px] md:text-xs hidden sm:inline">YOUR SCORE:</span>
+            <span className="text-white font-heading font-extrabold text-lg md:text-2xl">
               {myPlayer?.score || 0}
             </span>
           </div>
@@ -192,7 +201,7 @@ export const GameView: React.FC = () => {
       </div>
 
       {/* Main Canvas Container */}
-      <div className="flex-1 relative flex items-center justify-center my-2">
+      <div className="flex-1 relative flex items-center justify-center my-1 md:my-2">
         <canvas
           ref={canvasRef}
           width={1600}
@@ -201,26 +210,32 @@ export const GameView: React.FC = () => {
         />
 
         {/* Side Leaderboard Pill Overlay */}
-        <div className="absolute top-4 right-4 bg-nexus-surface/80 border border-nexus-border backdrop-blur rounded-btn p-3 font-mono text-xs space-y-2 min-w-[160px]">
-          <div className="text-[10px] text-nexus-muted uppercase font-heading font-bold border-b border-nexus-border pb-1">
+        <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-nexus-surface/90 border border-nexus-border backdrop-blur rounded-btn p-2 md:p-3 font-mono text-[11px] md:text-xs space-y-1.5 md:space-y-2 min-w-[130px] md:min-w-[160px] shadow-lg">
+          <div className="text-[9px] md:text-[10px] text-nexus-muted uppercase font-heading font-bold border-b border-nexus-border pb-1">
             SCOREBOARD
           </div>
           {sortedPlayers.slice(0, 5).map((p: any, idx: number) => (
-            <div key={p.id} className="flex items-center justify-between gap-2">
-              <span className="text-nexus-muted">#{idx + 1} {p.username}</span>
+            <div key={p.id} className="flex items-center justify-between gap-1.5">
+              <span className="text-nexus-muted truncate max-w-[80px] md:max-w-[100px]">#{idx + 1} {p.username}</span>
               <span className="font-bold text-nexus-cyan">{p.score}</span>
             </div>
           ))}
         </div>
+
+        {/* Mobile Virtual D-Pad Overlay */}
+        <div className="md:hidden fixed bottom-14 left-4 z-40 opacity-90 active:opacity-100">
+          <VirtualDPad onDirectionChange={handleVirtualDpadChange} />
+        </div>
       </div>
 
       {/* Bottom Controls Bar */}
-      <div className="flex items-center justify-between bg-nexus-surface/80 border border-nexus-border px-6 py-2 rounded-btn font-mono text-xs text-nexus-muted">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between bg-nexus-surface/80 border border-nexus-border px-3 md:px-6 py-1.5 md:py-2 rounded-btn font-mono text-[11px] md:text-xs text-nexus-muted">
+        <div className="flex items-center gap-2 md:gap-3">
           <Gamepad2 className="w-4 h-4 text-nexus-cyan" />
-          <span>CONTROLS: <strong className="text-white">WASD</strong> OR <strong className="text-white">ARROWS</strong> TO MOVE</span>
+          <span className="hidden md:inline">CONTROLS: <strong className="text-white">WASD</strong> OR <strong className="text-white">ARROWS</strong> TO MOVE</span>
+          <span className="md:hidden text-nexus-cyan font-bold">TOUCH D-PAD TO MOVE</span>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4 text-[10px] md:text-xs">
           <span>ORBS: <span className="text-nexus-cyan">CYAN (+10)</span> • <span className="text-amber-400">GOLD (+50)</span> • <span className="text-nexus-accent">CORE (+100)</span></span>
         </div>
       </div>

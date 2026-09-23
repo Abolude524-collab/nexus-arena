@@ -82,6 +82,26 @@ export const App: React.FC = () => {
     }
   }, [isAuthenticated, initSocketListeners, initGameSocketListeners, restoreMyRoom]);
 
+  const handleEnterLobby = async () => {
+    if (isAuthenticated) {
+      navigateTo('lobby');
+      return;
+    }
+    const token = localStorage.getItem('nexus_token');
+    if (token) {
+      try {
+        await checkAuth();
+        if (useAuthStore.getState().isAuthenticated) {
+          navigateTo('lobby');
+          return;
+        }
+      } catch (_e) {
+        // Token invalid/expired
+      }
+    }
+    openAuth('login');
+  };
+
   const openAuth = (mode: 'login' | 'register') => {
     setAuthMode(mode);
     setIsAuthModalOpen(true);
@@ -111,7 +131,7 @@ export const App: React.FC = () => {
           {/* Desktop Nav Items */}
           <nav className="hidden md:flex items-center gap-8 font-heading text-sm uppercase tracking-wider text-nexus-muted">
             <button
-              onClick={() => navigateTo(isAuthenticated ? 'lobby' : 'landing')}
+              onClick={handleEnterLobby}
               className={`transition-colors hover:text-nexus-cyan cursor-pointer ${
                 activeView === 'lobby' || activeView === 'landing' ? 'text-white font-bold' : ''
               }`}
@@ -406,17 +426,11 @@ export const App: React.FC = () => {
 
                   <div className="flex flex-wrap items-center gap-4 pt-4">
                     <button
-                      onClick={() => {
-                        if (isAuthenticated) {
-                          navigateTo('lobby');
-                        } else {
-                          openAuth('register');
-                        }
-                      }}
+                      onClick={handleEnterLobby}
                       className="px-8 py-3.5 rounded-btn bg-nexus-accent hover:bg-nexus-accent/90 text-white font-heading font-bold text-base uppercase tracking-wider transition-all glow-accent flex items-center gap-3 cursor-pointer"
                     >
                       <Gamepad2 className="w-5 h-5" />
-                      {isAuthenticated ? 'ENTER LOBBY' : 'PLAY NOW'}
+                      {isAuthenticated || Boolean(localStorage.getItem('nexus_token')) ? 'ENTER LOBBY' : 'PLAY NOW'}
                     </button>
                     <a
                       href="https://github.com"
@@ -541,7 +555,7 @@ export const App: React.FC = () => {
                   <div className="flex items-center justify-between pt-2 border-t border-nexus-border/50 font-mono text-xs">
                     <span className="text-nexus-cyan">60 FPS TICK LOOP</span>
                     <button
-                      onClick={() => navigateTo(isAuthenticated ? 'lobby' : 'landing')}
+                      onClick={handleEnterLobby}
                       className="text-white hover:text-nexus-cyan flex items-center gap-1 font-bold cursor-pointer"
                     >
                       ENTER ARENA <ArrowRight className="w-3.5 h-3.5" />
@@ -582,7 +596,7 @@ export const App: React.FC = () => {
                   <div className="flex items-center justify-between pt-2 border-t border-nexus-border/50 font-mono text-xs">
                     <span className="text-nexus-success">&lt; 150MS THRESHOLD</span>
                     <button
-                      onClick={() => navigateTo(isAuthenticated ? 'lobby' : 'landing')}
+                      onClick={handleEnterLobby}
                       className="text-white hover:text-nexus-cyan flex items-center gap-1 font-bold cursor-pointer"
                     >
                       ENTER ARENA <ArrowRight className="w-3.5 h-3.5" />
@@ -623,7 +637,7 @@ export const App: React.FC = () => {
                   <div className="flex items-center justify-between pt-2 border-t border-nexus-border/50 font-mono text-xs">
                     <span className="text-amber-400">+10 PTS/SEC CONTROL</span>
                     <button
-                      onClick={() => navigateTo(isAuthenticated ? 'lobby' : 'landing')}
+                      onClick={handleEnterLobby}
                       className="text-white hover:text-nexus-cyan flex items-center gap-1 font-bold cursor-pointer"
                     >
                       ENTER ARENA <ArrowRight className="w-3.5 h-3.5" />
@@ -664,7 +678,7 @@ export const App: React.FC = () => {
                   <div className="flex items-center justify-between pt-2 border-t border-nexus-border/50 font-mono text-xs">
                     <span className="text-nexus-success">SPEED MULTIPLIERS</span>
                     <button
-                      onClick={() => navigateTo(isAuthenticated ? 'lobby' : 'landing')}
+                      onClick={handleEnterLobby}
                       className="text-white hover:text-nexus-cyan flex items-center gap-1 font-bold cursor-pointer"
                     >
                       ENTER ARENA <ArrowRight className="w-3.5 h-3.5" />

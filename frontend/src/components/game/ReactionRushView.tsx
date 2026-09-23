@@ -95,6 +95,10 @@ export const ReactionRushView: React.FC<ReactionRushViewProps> = ({ gameState })
         {gameState.target && gameState.status === 'TARGET_ACTIVE' && (
           <button
             onClick={() => handleTargetClick(gameState.target!.id)}
+            onTouchStart={(e) => {
+              e.preventDefault();
+              handleTargetClick(gameState.target!.id);
+            }}
             style={{
               position: 'absolute',
               left: `${(gameState.target.x / 1600) * 100}%`,

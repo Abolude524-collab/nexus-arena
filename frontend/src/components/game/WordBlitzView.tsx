@@ -85,38 +85,38 @@ export const WordBlitzView: React.FC<WordBlitzViewProps> = ({ gameState }) => {
           </div>
 
           {/* Challenge Prompt Box */}
-          <div className="p-8 rounded-card bg-nexus-card border-2 border-nexus-border space-y-3 shadow-2xl">
-            <div className="font-mono text-xs text-nexus-muted uppercase tracking-widest">
+          <div className="p-4 sm:p-8 rounded-card bg-nexus-card border-2 border-nexus-border space-y-2 sm:space-y-3 shadow-2xl">
+            <div className="font-mono text-[10px] sm:text-xs text-nexus-muted uppercase tracking-widest">
               TYPE THE WORD
             </div>
-            <div className="font-heading font-extrabold text-5xl md:text-6xl text-white tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-nexus-accent via-nexus-cyan to-white">
+            <div className="font-heading font-extrabold text-3xl sm:text-5xl md:text-6xl text-white tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-nexus-accent via-nexus-cyan to-white break-all">
               {gameState.challenge?.prompt || 'WAITING...'}
             </div>
           </div>
 
           {/* Input & Submission Form */}
-          <form onSubmit={handleSubmit} className="flex items-center gap-3">
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
             <input
               type="text"
               autoFocus
               disabled={submitted || gameState.status !== 'ROUND_ACTIVE'}
               placeholder={
                 submitted
-                  ? 'ANSWER SUBMITTED — WAITING FOR ROUND END...'
+                  ? 'ANSWER SUBMITTED...'
                   : gameState.status === 'ROUND_ACTIVE'
-                  ? 'TYPE YOUR ANSWER HERE AND PRESS ENTER...'
+                  ? 'TYPE YOUR ANSWER HERE...'
                   : 'GET READY FOR NEXT ROUND...'
               }
               value={inputAnswer}
               onChange={(e) => setInputAnswer(e.target.value)}
-              className="flex-1 px-6 py-4 rounded-btn bg-nexus-surface border border-nexus-border text-white text-lg font-mono tracking-wider focus:outline-none focus:border-nexus-accent disabled:opacity-50 uppercase shadow-inner"
+              className="flex-1 px-4 sm:px-6 py-3 sm:py-4 rounded-btn bg-nexus-surface border border-nexus-border text-white text-base sm:text-lg font-mono tracking-wider focus:outline-none focus:border-nexus-accent disabled:opacity-50 uppercase shadow-inner"
             />
             <button
               type="submit"
               disabled={submitted || !inputAnswer.trim() || gameState.status !== 'ROUND_ACTIVE'}
-              className="px-8 py-4 rounded-btn bg-nexus-accent hover:bg-nexus-accent/90 disabled:opacity-40 text-white font-heading font-bold text-base uppercase tracking-wider transition-all glow-accent flex items-center gap-2 cursor-pointer"
+              className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-btn bg-nexus-accent hover:bg-nexus-accent/90 disabled:opacity-40 text-white font-heading font-bold text-sm sm:text-base uppercase tracking-wider transition-all glow-accent flex items-center justify-center gap-2 cursor-pointer"
             >
-              <Send className="w-5 h-5" /> SUBMIT
+              <Send className="w-4 h-4 sm:w-5 sm:h-5" /> SUBMIT
             </button>
           </form>
 

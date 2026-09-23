@@ -22,6 +22,11 @@ export const registerGameHandlers = (_io: Server, socket: AuthenticatedSocket): 
       return;
     }
 
+    if (room.players.length < 2) {
+      socket.emit('system:error', { message: 'Minimum 2 players required to start match' });
+      return;
+    }
+
     try {
       const playerInits = room.players.map((p) => ({ id: p.id, username: p.username }));
       gameManager.startGame(roomId, playerInits);

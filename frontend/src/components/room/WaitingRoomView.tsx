@@ -155,13 +155,20 @@ export const WaitingRoomView: React.FC = () => {
             )}
 
             {isHost && (
-              <button
-                onClick={startGame}
-                disabled={currentRoom.players.length < 1}
-                className="px-8 py-3.5 rounded-btn bg-nexus-accent hover:bg-nexus-accent/90 disabled:opacity-50 text-white font-heading font-bold text-sm uppercase tracking-wider transition-all glow-accent flex items-center gap-3 cursor-pointer"
-              >
-                <Play className="w-5 h-5 fill-current" /> START MATCH
-              </button>
+              <div className="flex flex-col items-end gap-2">
+                {currentRoom.players.length < 2 && (
+                  <span className="font-mono text-xs text-amber-400 bg-amber-400/10 border border-amber-400/30 px-3 py-1 rounded-full animate-pulse flex items-center gap-1.5">
+                    ⚠️ NEED MINIMUM 2 PLAYERS TO START
+                  </span>
+                )}
+                <button
+                  onClick={startGame}
+                  disabled={currentRoom.players.length < 2}
+                  className="px-8 py-3.5 rounded-btn bg-nexus-accent hover:bg-nexus-accent/90 disabled:opacity-40 disabled:cursor-not-allowed text-white font-heading font-bold text-sm uppercase tracking-wider transition-all glow-accent flex items-center gap-3 cursor-pointer"
+                >
+                  <Play className="w-5 h-5 fill-current" /> START MATCH
+                </button>
+              </div>
             )}
           </div>
         </div>
