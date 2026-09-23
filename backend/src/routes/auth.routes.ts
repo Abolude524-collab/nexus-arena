@@ -6,18 +6,24 @@ const router = Router();
 
 router.post('/register', async (req, res: Response) => {
   try {
+    console.log(`[Auth Route] Register attempt for email: ${req.body?.email}`);
     const result = await AuthService.register(req.body);
+    console.log(`[Auth Route] Register successful for email: ${req.body?.email}`);
     res.status(201).json(result);
   } catch (error: any) {
+    console.error(`[Auth Route] Register error for email ${req.body?.email}:`, error.message);
     res.status(400).json({ error: error.message || 'Registration failed' });
   }
 });
 
 router.post('/login', async (req, res: Response) => {
   try {
+    console.log(`[Auth Route] Login attempt for email: ${req.body?.email}`);
     const result = await AuthService.login(req.body);
+    console.log(`[Auth Route] Login successful for email: ${req.body?.email}`);
     res.status(200).json(result);
   } catch (error: any) {
+    console.error(`[Auth Route] Login error for email ${req.body?.email}:`, error.message);
     res.status(401).json({ error: error.message || 'Login failed' });
   }
 });
