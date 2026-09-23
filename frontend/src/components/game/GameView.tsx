@@ -20,6 +20,14 @@ export const GameView: React.FC = () => {
 
   const [keys, setKeys] = useState({ up: false, down: false, left: false, right: false });
 
+  const handleVirtualDpadChange = useCallback(
+    (newKeys: { up: boolean; down: boolean; left: boolean; right: boolean }) => {
+      setKeys(newKeys);
+      sendInput(newKeys);
+    },
+    [sendInput]
+  );
+
   // Initialize socket listeners on mount
   useEffect(() => {
     initGameSocketListeners();
@@ -163,14 +171,6 @@ export const GameView: React.FC = () => {
   const remainingSeconds = gameState ? Math.max(0, Math.ceil(((gameState.endsAt || 0) - now) / 1000)) : 0;
   const mins = Math.floor(remainingSeconds / 60);
   const secs = remainingSeconds % 60;
-  const handleVirtualDpadChange = useCallback(
-    (newKeys: { up: boolean; down: boolean; left: boolean; right: boolean }) => {
-      setKeys(newKeys);
-      sendInput(newKeys);
-    },
-    [sendInput]
-  );
-
   const timerStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 
   return (
