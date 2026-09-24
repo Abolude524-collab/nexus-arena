@@ -164,11 +164,13 @@ export class NeonDash implements GameMode {
     const player = this.players.get(userId);
     if (!player) return;
 
-    const lastSeq = this.playerSequences.get(userId) || 0;
-    if (input.sequence <= lastSeq && lastSeq > 0) {
-      return; // Ignore out-of-order stale inputs
+    if (input.sequence && input.sequence > 0) {
+      const lastSeq = this.playerSequences.get(userId) || 0;
+      if (input.sequence < lastSeq) {
+        return; // Ignore strictly older sequence numbers
+      }
+      this.playerSequences.set(userId, input.sequence);
     }
-    this.playerSequences.set(userId, input.sequence);
 
     let moveX = 0;
     let moveY = 0;

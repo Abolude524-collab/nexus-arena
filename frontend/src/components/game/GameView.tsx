@@ -18,14 +18,23 @@ export const GameView: React.FC = () => {
   const { user } = useAuthStore();
   const { currentRoom, leaveRoom } = useRoomStore();
 
-  const [keys, setKeys] = useState({ up: false, down: false, left: false, right: false });
+  const [_keys, setKeys] = useState({ up: false, down: false, left: false, right: false });
+  const activeKeysRef = useRef({ up: false, down: false, left: false, right: false });
 
-  const handleVirtualDpadChange = useCallback(
+  const updateInputState = useCallback(
     (newKeys: { up: boolean; down: boolean; left: boolean; right: boolean }) => {
+      activeKeysRef.current = newKeys;
       setKeys(newKeys);
       sendInput(newKeys);
     },
     [sendInput]
+  );
+
+  const handleVirtualDpadChange = useCallback(
+    (newKeys: { up: boolean; down: boolean; left: boolean; right: boolean }) => {
+      updateInputState(newKeys);
+    },
+    [updateInputState]
   );
 
   // Initialize socket listeners on mount
@@ -40,66 +49,64 @@ export const GameView: React.FC = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
       let updated = false;
-      const newKeys = { ...keys };
+      const current = { ...activeKeysRef.current };
 
       if (key === 'w' || key === 'arrowup') {
-        if (!newKeys.up) {
-          newKeys.up = true;
+        if (!current.up) {
+          current.up = true;
           updated = true;
         }
       } else if (key === 's' || key === 'arrowdown') {
-        if (!newKeys.down) {
-          newKeys.down = true;
+        if (!current.down) {
+          current.down = true;
           updated = true;
         }
       } else if (key === 'a' || key === 'arrowleft') {
-        if (!newKeys.left) {
-          newKeys.left = true;
+        if (!current.left) {
+          current.left = true;
           updated = true;
         }
       } else if (key === 'd' || key === 'arrowright') {
-        if (!newKeys.right) {
-          newKeys.right = true;
+        if (!current.right) {
+          current.right = true;
           updated = true;
         }
       }
 
       if (updated) {
-        setKeys(newKeys);
-        sendInput(newKeys);
+        updateInputState(current);
       }
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
       let updated = false;
-      const newKeys = { ...keys };
+      const current = { ...activeKeysRef.current };
 
       if (key === 'w' || key === 'arrowup') {
-        if (newKeys.up) {
-          newKeys.up = false;
+        if (current.up) {
+          current.up = false;
           updated = true;
         }
       } else if (key === 's' || key === 'arrowdown') {
-        if (newKeys.down) {
-          newKeys.down = false;
+        if (current.down) {
+          current.down = false;
           updated = true;
         }
       } else if (key === 'a' || key === 'arrowleft') {
-        if (newKeys.left) {
-          newKeys.left = false;
+        if (current.left) {
+          current.left = false;
           updated = true;
         }
       } else if (key === 'd' || key === 'arrowright') {
-        if (newKeys.right) {
-          newKeys.right = false;
+        if (current.right) {
+          current.right = false;
           updated = true;
         }
       }
 
       if (updated) {
-        setKeys(newKeys);
-        sendInput(newKeys);
+        updateInputState(current);
       }
     };
 
@@ -110,7 +117,7 @@ export const GameView: React.FC = () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [keys, sendInput, currentRoom]);
+  }, [currentRoom?.gameType, updateInputState]);
 
   // Render animation frame loop for Neon Dash
   useEffect(() => {
