@@ -97,6 +97,8 @@ export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
     };
   }, [keys]);
 
+  const [showDpad, setShowDpad] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
+
   const now = Date.now();
   const remainingSeconds = Math.max(0, Math.ceil((gameState.endsAt - now) / 1000));
   const mins = Math.floor(remainingSeconds / 60);
@@ -108,7 +110,7 @@ export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
   return (
     <div className="fixed inset-0 z-50 bg-nexus-bg flex flex-col justify-between p-2 md:p-4 overflow-hidden selection:bg-none font-sans">
       {/* Top HUD */}
-      <div className="flex items-center justify-between bg-nexus-surface/90 border border-nexus-border backdrop-blur px-3 md:px-6 py-2 md:py-3 rounded-card z-10">
+      <div className="flex items-center justify-between bg-nexus-surface/90 border border-nexus-border backdrop-blur px-3 md:px-6 py-2 md:py-3 rounded-card z-10 shrink-0">
         <div className="flex items-center gap-3 md:gap-6">
           <div className="font-heading font-extrabold text-base md:text-xl text-white tracking-wider flex items-center gap-1.5">
             <Shield className="w-5 h-5 md:w-6 md:h-6 text-nexus-accent animate-pulse" />
@@ -137,9 +139,9 @@ export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
         </div>
       </div>
 
-      {/* Main 10x10 Spatial Grid Container */}
-      <div className="flex-1 relative flex items-center justify-center my-2">
-        <div className="relative aspect-square h-full max-h-[calc(100vh-12rem)] rounded-card border-2 border-nexus-border bg-nexus-surface p-2 shadow-2xl grid grid-cols-10 grid-rows-10 gap-1.5">
+      {/* Main 10x10 Spatial Grid Container - min-h-0 prevents flex overflow */}
+      <div className="flex-1 min-h-0 relative flex items-center justify-center my-1 md:my-2 overflow-hidden">
+        <div className="relative aspect-square h-full max-h-full rounded-card border-2 border-nexus-border bg-nexus-surface p-2 shadow-2xl grid grid-cols-10 grid-rows-10 gap-1.5">
           {gameState.cells.map((cell) => {
             const owner = gameState.players.find((p) => p.id === cell.ownerId);
             const isContested = cell.state === 'CONTESTED';
@@ -194,13 +196,13 @@ export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
         </div>
 
         {/* Side Scoreboard */}
-        <div className="absolute top-4 right-4 bg-nexus-surface/80 border border-nexus-border backdrop-blur rounded-btn p-3 font-mono text-xs space-y-2 min-w-[170px]">
-          <div className="text-[10px] text-nexus-muted uppercase font-heading font-bold border-b border-nexus-border pb-1">
-            TERRITORY LEADERBOARD
+        <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-nexus-surface/90 border border-nexus-border backdrop-blur rounded-btn p-2 md:p-3 font-mono text-[11px] md:text-xs space-y-1.5 md:space-y-2 min-w-[130px] md:min-w-[170px] shadow-lg">
+          <div className="text-[9px] md:text-[10px] text-nexus-muted uppercase font-heading font-bold border-b border-nexus-border pb-1">
+            LEADERBOARD
           </div>
           {sortedPlayers.map((p, idx) => (
-            <div key={p.id} className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-1.5 truncate max-w-[100px]">
+            <div key={p.id} className="flex items-center justify-between gap-1.5">
+              <div className="flex items-center gap-1.5 truncate max-w-[80px] md:max-w-[100px]">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: p.color }}></span>
                 <span className="text-nexus-muted truncate">#{idx + 1} {p.username}</span>
               </div>
@@ -208,24 +210,36 @@ export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
             </div>
           ))}
         </div>
-      </div>
 
-      {/* Mobile Virtual D-Pad Overlay */}
-      <div className="md:hidden fixed bottom-14 left-4 z-40 opacity-90 active:opacity-100">
-        <VirtualDPad
-          onDirectionChange={(newKeys) => {
-            setKeys(newKeys);
-            sendInput(newKeys);
-          }}
-        />
+        {/* Virtual D-Pad Overlay (Toggleable on Desktop, On by default on Mobile) */}
+        {showDpad && (
+          <div className="fixed bottom-14 left-4 z-40 opacity-90 hover:opacity-100 active:opacity-100 transition-opacity">
+            <VirtualDPad
+              onDirectionChange={(newKeys) => {
+                setKeys(newKeys);
+                sendInput(newKeys);
+              }}
+            />
+          </div>
+        )}
       </div>
 
       {/* Bottom HUD info */}
-      <div className="flex items-center justify-between bg-nexus-surface/80 border border-nexus-border px-3 md:px-6 py-1.5 md:py-2 rounded-btn font-mono text-[11px] md:text-xs text-nexus-muted">
-        <div className="flex items-center gap-2 md:gap-3">
+      <div className="flex items-center justify-between bg-nexus-surface/80 border border-nexus-border px-3 md:px-6 py-1.5 md:py-2 rounded-btn font-mono text-[11px] md:text-xs text-nexus-muted shrink-0">
+        <div className="flex items-center gap-2 md:gap-4">
           <Gamepad2 className="w-4 h-4 text-nexus-cyan" />
-          <span className="hidden md:inline">CONTROLS: <strong className="text-white">WASD</strong> OR <strong className="text-white">ARROWS</strong> TO MOVE ON 10×10 GRID</span>
-          <span className="md:hidden text-nexus-cyan font-bold">TOUCH D-PAD TO MOVE</span>
+          <span className="hidden md:inline">CONTROLS: <strong className="text-white">WASD</strong> / <strong className="text-white">ARROWS</strong></span>
+          <button
+            onClick={() => setShowDpad((prev) => !prev)}
+            className={`px-2 py-0.5 rounded border font-mono text-[10px] md:text-xs transition-colors flex items-center gap-1 cursor-pointer ${
+              showDpad
+                ? 'bg-nexus-cyan/20 border-nexus-cyan text-nexus-cyan font-bold'
+                : 'bg-nexus-card border-nexus-border text-nexus-muted hover:text-white'
+            }`}
+            title="Toggle On-Screen Virtual D-Pad"
+          >
+            🎮 D-PAD: {showDpad ? 'ON' : 'OFF'}
+          </button>
         </div>
         <div className="text-[10px] md:text-xs">
           SCORING: <span className="text-nexus-cyan">CAPTURE (+100)</span> • <span className="text-nexus-accent">CONTROL (+10/s)</span>
