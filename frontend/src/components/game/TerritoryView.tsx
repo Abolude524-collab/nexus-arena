@@ -14,6 +14,7 @@ export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
   const myPlayer = gameState.players.find((p) => p.id === user?.id);
 
   const [keys, setKeys] = useState({ up: false, down: false, left: false, right: false });
+  const [showDpad, setShowDpad] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
   const sendInput = (newKeys: { up: boolean; down: boolean; left: boolean; right: boolean }) => {
     const socket = socketService.getSocket();
@@ -96,8 +97,6 @@ export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
       window.removeEventListener('keyup', handleKeyUp);
     };
   }, [keys]);
-
-  const [showDpad, setShowDpad] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
   const now = Date.now();
   const remainingSeconds = Math.max(0, Math.ceil((gameState.endsAt - now) / 1000));

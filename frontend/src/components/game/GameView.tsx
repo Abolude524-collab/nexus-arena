@@ -19,6 +19,7 @@ export const GameView: React.FC = () => {
   const { currentRoom, leaveRoom } = useRoomStore();
 
   const [_keys, setKeys] = useState({ up: false, down: false, left: false, right: false });
+  const [showDpad, setShowDpad] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
   const activeKeysRef = useRef({ up: false, down: false, left: false, right: false });
 
   const updateInputState = useCallback(
@@ -177,8 +178,6 @@ export const GameView: React.FC = () => {
   const now = Date.now();
   const remainingSeconds = gameState ? Math.max(0, Math.ceil(((gameState.endsAt || 0) - now) / 1000)) : 0;
   const mins = Math.floor(remainingSeconds / 60);
-  const [showDpad, setShowDpad] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
-
   const secs = remainingSeconds % 60;
   const timerStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 
