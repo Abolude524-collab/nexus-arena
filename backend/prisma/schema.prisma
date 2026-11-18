@@ -21,6 +21,8 @@ model User {
   participants   MatchParticipant[]
   messages       Message[]
   xpTransactions XPTransaction[]
+  following      PlayerFollow[]     @relation("FollowsMade")
+  followers      PlayerFollow[]     @relation("FollowsReceived")
 }
 
 model PlayerStats {
@@ -57,16 +59,20 @@ model XPTransaction {
 
 
 model Room {
-  id           String   @id @default(uuid())
-  code         String   @unique
-  name         String
-  hostId       String
-  gameType     String   @default("Neon Dash")
-  status       String   @default("WAITING")
-  maxPlayers   Int      @default(8)
-  isPrivate    Boolean  @default(false)
-  passwordHash String?
-  createdAt    DateTime @default(now())
+  id                      String   @id @default(uuid())
+  code                    String   @unique
+  name                    String
+  hostId                  String
+  gameType                String   @default("Neon Dash")
+  status                  String   @default("WAITING")
+  maxPlayers              Int      @default(8)
+  isPrivate               Boolean  @default(false)
+  visibility              String   @default("PUBLIC")
+  allowSpectators         Boolean  @default(true)
+  spectatorLimit          Int      @default(50)
+  passwordHash            String?
+  spectatorAccessCodeHash String?
+  createdAt               DateTime @default(now())
 }
 
 model Match {
@@ -97,4 +103,19 @@ model Message {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   content   String
   createdAt DateTime @default(now())
+}
+
+model PlayerFollow {
+  id          String   @id @default(uuid())
+  followerId  String
+  playerId    String
+  isFavourite Boolean  @default(false)
+  notifyLive  Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  follower User @relation("FollowsMade", fields: [followerId], references: [id], onDelete: Cascade)
+  player   User @relation("FollowsReceived", fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, playerId])
+  @@index([playerId, notifyLive])
 }

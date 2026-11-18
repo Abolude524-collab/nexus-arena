@@ -6,6 +6,7 @@ import {
   MatchResult,
   PlayerResult,
   PlayerInput,
+  SpectatorGameState,
 } from '../shared/index.js';
 
 const GRID_SIZE = 10;
@@ -255,6 +256,42 @@ export class Territory implements GameMode {
       gridHeight: GRID_SIZE,
       cells: Array.from(this.cells.values()),
       players: Array.from(this.players.values()),
+    };
+  }
+
+  public getSpectatorState(): SpectatorGameState {
+    const state = this.getState();
+
+    return {
+      roomId: this.roomId,
+      gameType: 'Territory',
+      status: state.status,
+      serverTime: Date.now(),
+      state: {
+        status: state.status,
+        startedAt: state.startedAt,
+        endsAt: state.endsAt,
+        gridWidth: state.gridWidth,
+        gridHeight: state.gridHeight,
+        cells: state.cells.map((c) => ({
+          id: c.id,
+          gridX: c.gridX,
+          gridY: c.gridY,
+          ownerId: c.ownerId,
+          state: c.state,
+          captureProgress: c.captureProgress,
+          capturingPlayers: c.capturingPlayers,
+        })),
+        players: state.players.map((p) => ({
+          id: p.id,
+          username: p.username,
+          color: p.color,
+          gridX: p.gridX,
+          gridY: p.gridY,
+          score: p.score,
+          territoriesControlled: p.territoriesControlled,
+        })),
+      },
     };
   }
 

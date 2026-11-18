@@ -6,6 +6,7 @@ import {
   PlayerInput,
   MatchResult,
   PlayerResult,
+  SpectatorGameState,
 } from '../shared/index.js';
 import { GameMode, GamePlayerInit } from './GameMode.js';
 
@@ -264,6 +265,39 @@ export class NeonDash implements GameMode {
       players: Array.from(this.players.values()),
       collectibles: Array.from(this.collectibles.values()),
       obstacles: this.obstacles,
+    };
+  }
+
+  public getSpectatorState(): SpectatorGameState {
+    const state = this.getState();
+
+    return {
+      roomId: this.roomId,
+      gameType: 'Neon Dash',
+      status: state.status,
+      serverTime: Date.now(),
+      state: {
+        status: state.status,
+        countdownSeconds: state.countdownSeconds,
+        startedAt: state.startedAt,
+        endsAt: state.endsAt,
+        arenaWidth: state.arenaWidth,
+        arenaHeight: state.arenaHeight,
+        players: state.players.map((p) => ({
+          id: p.id,
+          username: p.username,
+          color: p.color,
+          x: p.x,
+          y: p.y,
+          velocityX: p.velocityX,
+          velocityY: p.velocityY,
+          radius: p.radius,
+          score: p.score,
+          activePowerUps: p.activePowerUps,
+        })),
+        collectibles: state.collectibles,
+        obstacles: state.obstacles,
+      },
     };
   }
 

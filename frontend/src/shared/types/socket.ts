@@ -1,6 +1,15 @@
 import { RoomDTO } from './room.js';
-import { GameState, PlayerInput, MatchResult } from './game.js';
+import {
+  GameState,
+  PlayerInput,
+  MatchResult,
+  SpectatorGameState,
+  SpectatorJoinedPayload,
+  SpectatorCountUpdate,
+  SpectatorMatchEndedPayload,
+} from './game.js';
 import { ProgressionPayload, LevelUpPayload } from './user.js';
+import { MatchLiveNotification } from './social.js';
 
 import { CreateRoomInput } from '../schemas/room.js';
 
@@ -12,6 +21,19 @@ export interface ChatMessage {
   content: string;
   timestamp: number;
   isSystem?: boolean;
+  isSpectator?: boolean;
+}
+
+export interface SpectatorJoinResponse {
+  success: boolean;
+  error?: string;
+  payload?: SpectatorJoinedPayload;
+}
+
+export interface SpectatorAccessCodeResponse {
+  success: boolean;
+  code?: string;
+  error?: string;
 }
 
 export interface ClientToServerEvents {
@@ -26,6 +48,11 @@ export interface ClientToServerEvents {
   'room:leave': () => void;
   'room:ready': (payload: { ready: boolean }) => void;
   'room:kick': (payload: { targetUserId: string }) => void;
+  'room:spectator_settings': (payload: { allowSpectators?: boolean; spectatorLimit?: number }) => void;
+  'room:spectator_code': (
+    payload?: { rotate?: boolean },
+    callback?: (response: SpectatorAccessCodeResponse) => void
+  ) => void;
   'game:start': () => void;
   'game:input': (input: PlayerInput) => void;
   'chat:send': (payload: { content: string }) => void;
@@ -44,6 +71,14 @@ export interface ClientToServerEvents {
   'word:ready': () => void;
   'word:submit': (payload: { roundId: number; answer: string }) => void;
   'word:leave': () => void;
+
+  // Watch / Spectator
+  'spectator:join': (
+    payload: { matchId: string; accessCode?: string },
+    callback?: (response: SpectatorJoinResponse) => void
+  ) => void;
+  'spectator:leave': () => void;
+  'spectator:chat': (payload: { content: string }) => void;
 }
 
 export interface ServerToClientEvents {
@@ -90,5 +125,17 @@ export interface ServerToClientEvents {
   'word:round_end': (payload: { roundId: number; correctAnswers: Record<string, boolean>; scores: Record<string, number> }) => void;
   'word:next_round': (payload: { roundId: number }) => void;
   'word:game_end': (results: MatchResult) => void;
+
+  // Watch / Spectator
+  'spectator:joined': (payload: SpectatorJoinedPayload) => void;
+  'spectator:left': (payload: { roomId: string; reason?: string }) => void;
+  'spectator:count_update': (payload: SpectatorCountUpdate) => void;
+  'spectator:game_state': (payload: SpectatorGameState) => void;
+  'spectator:chat_message': (message: ChatMessage) => void;
+  'spectator:match_ended': (payload: SpectatorMatchEndedPayload) => void;
+  'spectator:error': (payload: { message: string; code?: string }) => void;
+
+  // Registered-only social notifications
+  'notification:match_live': (payload: MatchLiveNotification) => void;
 }
 

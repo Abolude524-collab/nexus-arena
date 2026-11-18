@@ -1,0 +1,378 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bg-engine-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06080F" />
+      <stop offset="50%" stop-color="#090D17" />
+      <stop offset="100%" stop-color="#05070B" />
+    </linearGradient>
+
+    <!-- Card Backgrounds -->
+    <linearGradient id="card-engine-main" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#0B1120" stop-opacity="0.98" />
+    </linearGradient>
+
+    <linearGradient id="card-engine-sub" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#161226" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0C0A17" stop-opacity="0.98" />
+    </linearGradient>
+
+    <linearGradient id="header-accent-engine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F0FF" />
+      <stop offset="35%" stop-color="#8B5CF6" />
+      <stop offset="70%" stop-color="#EC4899" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+
+    <!-- Glow & Shadow Filters -->
+    <filter id="glow-cyan-eng" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="card-shadow-eng" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.6" />
+    </filter>
+
+    <!-- Markers -->
+    <marker id="arrow-c-eng" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#00F0FF" />
+    </marker>
+    <marker id="arrow-p-eng" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#A855F7" />
+    </marker>
+
+    <!-- Background Grid -->
+    <pattern id="grid-dots-eng" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#1E293B" fill-opacity="0.5" />
+    </pattern>
+  </defs>
+
+  <style>
+    .font-sans { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  </style>
+
+  <!-- 1. Background -->
+  <rect width="1600" height="1200" fill="url(#bg-engine-grad)" />
+  <rect width="1600" height="1200" fill="url(#grid-dots-eng)" />
+
+  <!-- Ambient Glows -->
+  <circle cx="350" cy="350" r="300" fill="#00F0FF" fill-opacity="0.03" filter="url(#glow-cyan-eng)" />
+  <circle cx="1250" cy="550" r="320" fill="#8B5CF6" fill-opacity="0.03" />
+
+  <!-- ==================== HEADER BAR ==================== -->
+  <g transform="translate(60, 42)">
+    <!-- Badges -->
+    <rect x="0" y="0" width="180" height="26" rx="6" fill="#00F0FF" fill-opacity="0.12" stroke="#00F0FF" stroke-width="1.2" stroke-opacity="0.4" />
+    <text x="90" y="17" fill="#00F0FF" font-size="11" font-weight="700" letter-spacing="1.5" text-anchor="middle" class="font-mono">ENGINE DEEP-DIVE</text>
+
+    <rect x="192" y="0" width="220" height="26" rx="6" fill="#8B5CF6" fill-opacity="0.12" stroke="#8B5CF6" stroke-width="1.2" stroke-opacity="0.4" />
+    <text x="302" y="17" fill="#C084FC" font-size="11" font-weight="700" letter-spacing="1.5" text-anchor="middle" class="font-mono">GAMEPLAY &amp; RENDERING</text>
+
+    <rect x="424" y="0" width="180" height="26" rx="6" fill="#10B981" fill-opacity="0.12" stroke="#10B981" stroke-width="1.2" stroke-opacity="0.4" />
+    <text x="514" y="17" fill="#34D399" font-size="11" font-weight="700" letter-spacing="1.5" text-anchor="middle" class="font-mono">SERVER-SIDE PHYSICS</text>
+
+    <!-- Main Title -->
+    <text x="0" y="68" fill="#FFFFFF" font-size="32" font-weight="900" letter-spacing="1.2" class="font-sans">
+      INSIDE THE GAME ENGINE
+    </text>
+    <!-- Subtitle -->
+    <text x="0" y="96" fill="#94A3B8" font-size="15" font-weight="400" letter-spacing="0.3" class="font-sans">
+      Game mechanics, state management and browser rendering.
+    </text>
+
+    <!-- Stat Pill (Top Right) -->
+    <g transform="translate(1080, 12)">
+      <rect x="0" y="0" width="400" height="42" rx="8" fill="#0F172A" stroke="#1E293B" stroke-width="1.2" />
+      <text x="18" y="26" fill="#64748B" font-size="11" font-weight="700" class="font-mono">SIMULATION</text>
+      <text x="110" y="26" fill="#00F0FF" font-size="13" font-weight="700" class="font-sans">60 Hz Tick Rate • 16.667 ms Delta</text>
+    </g>
+  </g>
+
+  <!-- Horizontal Divider -->
+  <line x1="60" y1="162" x2="1540" y2="162" stroke="url(#header-accent-engine)" stroke-width="2" stroke-opacity="0.7" />
+
+  <!-- ==================== LEFT COLUMN: SERVER ENGINE SUBSYSTEM ==================== -->
+  <g transform="translate(60, 185)">
+    <!-- Container -->
+    <rect x="0" y="0" width="720" height="945" rx="14" fill="url(#card-engine-main)" stroke="#1E293B" stroke-width="1.5" filter="url(#card-shadow-eng)" />
+
+    <!-- Header Box -->
+    <rect x="18" y="14" width="684" height="40" rx="8" fill="#0F172A" stroke="#8B5CF6" stroke-width="1.2" stroke-opacity="0.4" />
+    <circle cx="36" cy="34" r="5" fill="#8B5CF6" />
+    <text x="52" y="39" fill="#FFFFFF" font-size="14" font-weight="800" letter-spacing="0.5" class="font-sans">SERVER-SIDE ENGINE ARCHITECTURE (backend/src/game/)</text>
+    <rect x="580" y="23" width="112" height="22" rx="4" fill="#8B5CF6" fill-opacity="0.15" />
+    <text x="636" y="38" fill="#C084FC" font-size="10" font-weight="700" text-anchor="middle" class="font-mono">NODE.JS RUNTIME</text>
+
+    <!-- Block 1: Tick Orchestrator (GameManager) -->
+    <g transform="translate(18, 66)">
+      <rect x="0" y="0" width="684" height="138" rx="10" fill="#0A0E18" stroke="#1E293B" stroke-width="1.2" />
+      <text x="14" y="22" fill="#F59E0B" font-size="11" font-weight="700" letter-spacing="0.5" class="font-mono">TICK LOOP &amp; ORCHESTRATION (GameManager.ts)</text>
+
+      <g transform="translate(14, 32)">
+        <!-- Fixed 60 FPS Scheduler -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="320" height="94" rx="6" fill="#171A29" stroke="#253556" stroke-width="1" />
+          <text x="12" y="20" fill="#38BDF8" font-size="11" font-weight="700" class="font-sans">Fixed 60 FPS Scheduler</text>
+          <text x="12" y="38" fill="#E2E8F0" font-size="10" class="font-sans">• TICK_RATE = 60; TICK_INTERVAL_MS = 16.667ms</text>
+          <text x="12" y="54" fill="#E2E8F0" font-size="10" class="font-sans">• Delta Time: deltaSeconds = (now - lastTick) / 1000</text>
+          <text x="12" y="70" fill="#E2E8F0" font-size="10" class="font-sans">• Guarantees frame-rate independent kinematics</text>
+          <text x="12" y="86" fill="#94A3B8" font-size="9" class="font-mono">• Active Games Map: Map&lt;roomId, { game, timer }&gt;</text>
+        </g>
+
+        <!-- Lifecycle & Snapshot Dispatch -->
+        <g transform="translate(336, 0)">
+          <rect x="0" y="0" width="320" height="94" rx="6" fill="#171A29" stroke="#253556" stroke-width="1" />
+          <text x="12" y="20" fill="#FBBF24" font-size="11" font-weight="700" class="font-sans">Lifecycle &amp; Snapshot Dispatch</text>
+          <text x="12" y="38" fill="#E2E8F0" font-size="10" class="font-sans">• game.update(deltaSeconds) on active GameMode</text>
+          <text x="12" y="54" fill="#E2E8F0" font-size="10" class="font-sans">• Broadcasts snapshot: io.to(roomId).emit('game:state')</text>
+          <text x="12" y="70" fill="#E2E8F0" font-size="10" class="font-sans">• Evaluates game.isFinished() ➔ triggers endGame()</text>
+          <text x="12" y="86" fill="#00F0FF" font-size="9" class="font-mono">• Non-blocking handoff to MatchService for persistence</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Block 2: GameMode Polymorphic Interface -->
+    <g transform="translate(18, 216)">
+      <rect x="0" y="0" width="684" height="84" rx="10" fill="#0A0E18" stroke="#1E293B" stroke-width="1.2" />
+      <text x="14" y="22" fill="#C084FC" font-size="11" font-weight="700" letter-spacing="0.5" class="font-mono">POLYMORPHIC CONTRACT (GameMode.ts Interface)</text>
+
+      <g transform="translate(14, 30)">
+        <rect x="0" y="0" width="656" height="42" rx="6" fill="#141829" stroke="#8B5CF6" stroke-width="1" stroke-opacity="0.4" />
+        <text x="12" y="17" fill="#00F0FF" font-size="10" font-weight="600" class="font-mono">initialize(players) | handleInput(userId, input) | update(deltaSeconds) | getState() | isFinished() | getResults()</text>
+        <text x="12" y="32" fill="#94A3B8" font-size="9" class="font-sans">Enforces uniform lifecycle contracts across diverse arcade, reflex, grid and typing game mechanics.</text>
+      </g>
+    </g>
+
+    <!-- Block 3: Concrete Game Mode Implementations -->
+    <g transform="translate(18, 312)">
+      <rect x="0" y="0" width="684" height="618" rx="10" fill="#0A0E18" stroke="#1E293B" stroke-width="1.2" />
+      <text x="14" y="22" fill="#38BDF8" font-size="11" font-weight="700" letter-spacing="0.5" class="font-mono">FOUR CONCRETE AUTHORITATIVE GAME IMPLEMENTATIONS</text>
+
+      <g transform="translate(14, 32)">
+        <!-- Mode 1: Neon Dash Detail -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="656" height="138" rx="8" fill="url(#card-engine-sub)" stroke="#8B5CF6" stroke-width="1.2" stroke-opacity="0.6" />
+          <rect x="12" y="10" width="100" height="20" rx="4" fill="#8B5CF6" fill-opacity="0.2" />
+          <text x="62" y="24" fill="#C084FC" font-size="10" font-weight="700" text-anchor="middle" class="font-mono">NEON DASH</text>
+          <text x="124" y="25" fill="#FFFFFF" font-size="12" font-weight="700" class="font-sans">2D Kinematics Arena &amp; Collectible Engine (NeonDash.ts)</text>
+
+          <g transform="translate(12, 36)">
+            <!-- Sub-Card A: Physics & Input -->
+            <g transform="translate(0, 0)">
+              <rect x="0" y="0" width="310" height="90" rx="6" fill="#0E1220" stroke="#1E293B" stroke-width="1" />
+              <text x="10" y="16" fill="#38BDF8" font-size="10" font-weight="700" class="font-mono">KINEMATICS &amp; BOUNDS</text>
+              <text x="10" y="32" fill="#E2E8F0" font-size="10" class="font-sans">• Speed: 360 px/s with 0.7071 diagonal normalization</text>
+              <text x="10" y="48" fill="#E2E8F0" font-size="10" class="font-sans">• Sequence Filter: drops packet if (input.sequence &lt; lastSeq)</text>
+              <text x="10" y="64" fill="#E2E8F0" font-size="10" class="font-sans">• Arena Bounds: Clamps to [18, 1582] X and [18, 882] Y</text>
+              <text x="10" y="80" fill="#94A3B8" font-size="9" class="font-mono">• 5 Static Obstacles: AABB box overlap rejection</text>
+            </g>
+
+            <!-- Sub-Card B: Collectible Mechanics -->
+            <g transform="translate(322, 0)">
+              <rect x="0" y="0" width="310" height="90" rx="6" fill="#0E1220" stroke="#1E293B" stroke-width="1" />
+              <text x="10" y="16" fill="#34D399" font-size="10" font-weight="700" class="font-mono">COLLECTIBLE TIERS &amp; PICKUP MATH</text>
+              <text x="10" y="32" fill="#E2E8F0" font-size="10" class="font-sans">• Energy Orbs (20 target): r=10, Value: +10 pts (Cyan)</text>
+              <text x="10" y="48" fill="#E2E8F0" font-size="10" class="font-sans">• Golden Orbs (4 target): r=14, Value: +50 pts (Amber)</text>
+              <text x="10" y="64" fill="#E2E8F0" font-size="10" class="font-sans">• Power Cores (2 target): r=18, Value: +100 pts (Purple)</text>
+              <text x="10" y="80" fill="#00F0FF" font-size="9" class="font-mono">• Collision Check: sqrt(dx² + dy²) &lt; playerRadius + orbRadius</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- Mode 2: Reaction Rush Detail -->
+        <g transform="translate(0, 148)">
+          <rect x="0" y="0" width="656" height="136" rx="8" fill="#0E1220" stroke="#1E293B" stroke-width="1" />
+          <rect x="12" y="10" width="125" height="20" rx="4" fill="#00F0FF" fill-opacity="0.15" />
+          <text x="74" y="24" fill="#00F0FF" font-size="10" font-weight="700" text-anchor="middle" class="font-mono">REACTION RUSH</text>
+          <text x="148" y="25" fill="#FFFFFF" font-size="12" font-weight="700" class="font-sans">Sub-Millisecond Reflex Arbiter (ReactionRush.ts)</text>
+
+          <text x="14" y="46" fill="#E2E8F0" font-size="10" class="font-sans">• State Progression: COUNTDOWN ➔ ARMED (random 1.5 - 4.5s jitter) ➔ TARGET_ACTIVE ➔ ROUND_RESULT</text>
+          <text x="14" y="66" fill="#E2E8F0" font-size="10" class="font-sans">• Strict Anti-Cheat / False Start: Clicks during ARMED trigger immediate false-start penalty &amp; lockout</text>
+          <text x="14" y="86" fill="#E2E8F0" font-size="10" class="font-sans">• Latency Resolution: Server timestamp comparison (Date.now() - target.activatedAt) records verified reaction ms</text>
+          <text x="14" y="104" fill="#94A3B8" font-size="9" class="font-mono">• Match Format: 10 consecutive rounds with automated 2-second intermission timers</text>
+          <text x="14" y="122" fill="#38BDF8" font-size="9" class="font-mono">• Standings: Ranks participants by lowest cumulative average response time across valid hits</text>
+        </g>
+
+        <!-- Mode 3: Territory Detail -->
+        <g transform="translate(0, 294)">
+          <rect x="0" y="0" width="656" height="136" rx="8" fill="#0E1220" stroke="#1E293B" stroke-width="1" />
+          <rect x="12" y="10" width="100" height="20" rx="4" fill="#10B981" fill-opacity="0.15" />
+          <text x="62" y="24" fill="#34D399" font-size="10" font-weight="700" text-anchor="middle" class="font-mono">TERRITORY</text>
+          <text x="124" y="25" fill="#FFFFFF" font-size="12" font-weight="700" class="font-sans">Spatial Grid Matrix &amp; Ownership Engine (Territory.ts)</text>
+
+          <text x="14" y="46" fill="#E2E8F0" font-size="10" class="font-sans">• Grid Dimension: 10 × 10 discrete spatial cells (100 total cells) with individual state machines</text>
+          <text x="14" y="66" fill="#E2E8F0" font-size="10" class="font-sans">• Capture Mechanics: 3.0-second hold requirement per cell; pauses if contested by opposing player</text>
+          <text x="14" y="86" fill="#E2E8F0" font-size="10" class="font-sans">• Scoring Accumulator: Every second, owned territories yield continuous passive score points (+1 pt/cell/sec)</text>
+          <text x="14" y="104" fill="#94A3B8" font-size="9" class="font-mono">• Match Duration: 300 seconds (5 minutes) with highest cumulative territory controller crowned MVP</text>
+          <text x="14" y="122" fill="#34D399" font-size="9" class="font-mono">• State Synchronization: Emits full 100-cell owner/progress array on each 60 FPS tick</text>
+        </g>
+
+        <!-- Mode 4: Word Blitz Detail -->
+        <g transform="translate(0, 440)">
+          <rect x="0" y="0" width="656" height="134" rx="8" fill="#0E1220" stroke="#1E293B" stroke-width="1" />
+          <rect x="12" y="10" width="110" height="20" rx="4" fill="#F59E0B" fill-opacity="0.15" />
+          <text x="67" y="24" fill="#FBBF24" font-size="10" font-weight="700" text-anchor="middle" class="font-mono">WORD BLITZ</text>
+          <text x="134" y="25" fill="#FFFFFF" font-size="12" font-weight="700" class="font-sans">Linguistic Racing &amp; Typing Verification Engine (WordBlitz.ts)</text>
+
+          <text x="14" y="46" fill="#E2E8F0" font-size="10" class="font-sans">• Challenge Pool: 15 curated tech/gaming words (NEON, ARENA, SYNCHRONIZED, DETERMINISTIC, etc.)</text>
+          <text x="14" y="66" fill="#E2E8F0" font-size="10" class="font-sans">• Verification &amp; Anti-Spam: Normalized string matching (.trim().toUpperCase()) with single-submission per round</text>
+          <text x="14" y="86" fill="#E2E8F0" font-size="10" class="font-sans">• Speed Bonus: First correct participant receives +150 bonus pts; all other correct answers receive +50 pts</text>
+          <text x="14" y="104" fill="#94A3B8" font-size="9" class="font-mono">• Round Schedule: 10 total rounds; 10 seconds per challenge word with 2-second interstitial countdown</text>
+          <text x="14" y="122" fill="#F59E0B" font-size="9" class="font-mono">• Security: Server-side secret phrase concealment prevents client-side inspection</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== RIGHT COLUMN: CLIENT RENDERING & PIPELINE ==================== -->
+  <g transform="translate(820, 185)">
+    <!-- Container -->
+    <rect x="0" y="0" width="720" height="945" rx="14" fill="url(#card-engine-main)" stroke="#1E293B" stroke-width="1.5" filter="url(#card-shadow-eng)" />
+
+    <!-- Header Box -->
+    <rect x="18" y="14" width="684" height="40" rx="8" fill="#0F172A" stroke="#00F0FF" stroke-width="1.2" stroke-opacity="0.4" />
+    <circle cx="36" cy="34" r="5" fill="#00F0FF" />
+    <text x="52" y="39" fill="#FFFFFF" font-size="14" font-weight="800" letter-spacing="0.5" class="font-sans">CLIENT RENDERING PIPELINE &amp; DUAL-LOOP ARCHITECTURE</text>
+    <rect x="580" y="23" width="112" height="22" rx="4" fill="#00F0FF" fill-opacity="0.15" />
+    <text x="636" y="38" fill="#00F0FF" font-size="10" font-weight="700" text-anchor="middle" class="font-mono">CANVAS 2D API</text>
+
+    <!-- Block 1: Architecture Decoupling (React vs Canvas) -->
+    <g transform="translate(18, 66)">
+      <rect x="0" y="0" width="684" height="138" rx="10" fill="#0A0E18" stroke="#1E293B" stroke-width="1.2" />
+      <text x="14" y="22" fill="#00F0FF" font-size="11" font-weight="700" letter-spacing="0.5" class="font-mono">DUAL-LOOP DECOUPLING: ZERO REACT RE-RENDER OVERHEAD</text>
+
+      <g transform="translate(14, 32)">
+        <!-- React DOM Domain -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="320" height="94" rx="6" fill="#141C2E" stroke="#1E293B" stroke-width="1" />
+          <text x="12" y="20" fill="#38BDF8" font-size="11" font-weight="700" class="font-sans">React 18 DOM Domain (Low Frequency)</text>
+          <text x="12" y="38" fill="#E2E8F0" font-size="10" class="font-sans">• Manages HUD, Scoreboard, Timer, Modals</text>
+          <text x="12" y="54" fill="#E2E8F0" font-size="10" class="font-sans">• Virtual D-Pad touch listeners with touch-none</text>
+          <text x="12" y="70" fill="#E2E8F0" font-size="10" class="font-sans">• Re-renders only on discrete UI state changes</text>
+          <text x="12" y="86" fill="#94A3B8" font-size="9" class="font-mono">activeKeysRef: bypasses component re-render</text>
+        </g>
+
+        <!-- Canvas 2D Domain -->
+        <g transform="translate(336, 0)">
+          <rect x="0" y="0" width="320" height="94" rx="6" fill="#102528" stroke="#00F0FF" stroke-width="1" stroke-opacity="0.4" />
+          <text x="12" y="20" fill="#00F0FF" font-size="11" font-weight="700" class="font-sans">HTML5 Canvas 2D Domain (60 FPS High Freq)</text>
+          <text x="12" y="38" fill="#E2E8F0" font-size="10" class="font-sans">• Direct hardware-accelerated 2D Context access</text>
+          <text x="12" y="54" fill="#E2E8F0" font-size="10" class="font-sans">• Pure procedural rendering via CanvasRenderer.ts</text>
+          <text x="12" y="70" fill="#E2E8F0" font-size="10" class="font-sans">• Direct state memory read; bypasses React Reconciliation</text>
+          <text x="12" y="86" fill="#34D399" font-size="9" class="font-mono">Zero GC allocations in hot rendering path</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Block 2: 5-Stage Canvas Compositing Pipeline -->
+    <g transform="translate(18, 216)">
+      <rect x="0" y="0" width="684" height="412" rx="10" fill="#0A0E18" stroke="#1E293B" stroke-width="1.2" />
+      <text x="14" y="22" fill="#34D399" font-size="11" font-weight="700" letter-spacing="0.5" class="font-mono">5-STAGE CANVAS COMPOSITING PIPELINE (CanvasRenderer.ts)</text>
+
+      <g transform="translate(14, 32)">
+        <!-- Stage 1 -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="656" height="66" rx="6" fill="#0E1320" stroke="#1E293B" stroke-width="1" />
+          <rect x="10" y="10" width="76" height="20" rx="4" fill="#00F0FF" fill-opacity="0.15" />
+          <text x="48" y="24" fill="#00F0FF" font-size="10" font-weight="700" text-anchor="middle" class="font-mono">STAGE 1</text>
+          <text x="96" y="24" fill="#FFFFFF" font-size="11" font-weight="700" class="font-sans">Coordinate Space Projection &amp; Canvas Clear</text>
+          <text x="96" y="44" fill="#94A3B8" font-size="9.5" class="font-sans">scaleX = width / 1600; scaleY = height / 900; ctx.fillRect(0, 0, width, height) in #08090D</text>
+          <text x="96" y="58" fill="#38BDF8" font-size="9" class="font-mono">Applies ctx.scale(scaleX, scaleY) to map all subsequent draws into 1600×900 virtual coordinates</text>
+        </g>
+
+        <!-- Stage 2 -->
+        <g transform="translate(0, 74)">
+          <rect x="0" y="0" width="656" height="66" rx="6" fill="#0E1320" stroke="#1E293B" stroke-width="1" />
+          <rect x="10" y="10" width="76" height="20" rx="4" fill="#8B5CF6" fill-opacity="0.15" />
+          <text x="48" y="24" fill="#C084FC" font-size="10" font-weight="700" text-anchor="middle" class="font-mono">STAGE 2</text>
+          <text x="96" y="24" fill="#FFFFFF" font-size="11" font-weight="700" class="font-sans">Cyberpunk Background Grid &amp; Arena Boundaries</text>
+          <text x="96" y="44" fill="#94A3B8" font-size="9.5" class="font-sans">Renders 40px matrix grid lines (#151821) across full 1600×900 space</text>
+          <text x="96" y="58" fill="#C084FC" font-size="9" class="font-mono">Draws outer glowing arena boundary strokeRect in #8B5CF6 (strokeWidth 3px)</text>
+        </g>
+
+        <!-- Stage 3 -->
+        <g transform="translate(0, 148)">
+          <rect x="0" y="0" width="656" height="66" rx="6" fill="#0E1320" stroke="#1E293B" stroke-width="1" />
+          <rect x="10" y="10" width="76" height="20" rx="4" fill="#38BDF8" fill-opacity="0.15" />
+          <text x="48" y="24" fill="#38BDF8" font-size="10" font-weight="700" text-anchor="middle" class="font-mono">STAGE 3</text>
+          <text x="96" y="24" fill="#FFFFFF" font-size="11" font-weight="700" class="font-sans">Static Geometric Obstacle Layer</text>
+          <text x="96" y="44" fill="#94A3B8" font-size="9.5" class="font-sans">Iterates state.obstacles: renders #10121A fills with #262A38 boundary strokes</text>
+          <text x="96" y="58" fill="#38BDF8" font-size="9" class="font-mono">Prevents player penetration using server-synchronized AABB geometric barricades</text>
+        </g>
+
+        <!-- Stage 4 -->
+        <g transform="translate(0, 222)">
+          <rect x="0" y="0" width="656" height="66" rx="6" fill="#0E1320" stroke="#1E293B" stroke-width="1" />
+          <rect x="10" y="10" width="76" height="20" rx="4" fill="#F59E0B" fill-opacity="0.15" />
+          <text x="48" y="24" fill="#FBBF24" font-size="10" font-weight="700" text-anchor="middle" class="font-mono">STAGE 4</text>
+          <text x="96" y="24" fill="#FFFFFF" font-size="11" font-weight="700" class="font-sans">Dynamic Glowing Collectible Radial Passes</text>
+          <text x="96" y="44" fill="#94A3B8" font-size="9.5" class="font-sans">Radial arc() with shadowBlur: ENERGY (+10, Cyan, blur 12), GOLDEN (+50, Amber, blur 16)</text>
+          <text x="96" y="58" fill="#FBBF24" font-size="9" class="font-mono">POWER_CORE (+100, Purple, blur 20) with pulsing radial glow and item respawn loops</text>
+        </g>
+
+        <!-- Stage 5 -->
+        <g transform="translate(0, 296)">
+          <rect x="0" y="0" width="656" height="66" rx="6" fill="#0E1320" stroke="#00F0FF" stroke-width="1" stroke-opacity="0.3" />
+          <rect x="10" y="10" width="76" height="20" rx="4" fill="#10B981" fill-opacity="0.15" />
+          <text x="48" y="24" fill="#34D399" font-size="10" font-weight="700" text-anchor="middle" class="font-mono">STAGE 5</text>
+          <text x="96" y="24" fill="#FFFFFF" font-size="11" font-weight="700" class="font-sans">Player Avatars, Halo Rings &amp; Typography Labels</text>
+          <text x="96" y="44" fill="#94A3B8" font-size="9.5" class="font-sans">Renders colored player circle, local player aura ring (#22D3EE), and direction marker</text>
+          <text x="96" y="58" fill="#34D399" font-size="9" class="font-mono">Overlays username billboard and live score tag positioned above avatar head</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Block 3: Responsive DOM & Mobile Viewport Adaptations -->
+    <g transform="translate(18, 640)">
+      <rect x="0" y="0" width="684" height="290" rx="10" fill="#0A0E18" stroke="#1E293B" stroke-width="1.2" />
+      <text x="14" y="22" fill="#EC4899" font-size="11" font-weight="700" letter-spacing="0.5" class="font-mono">RESPONSIVE VIEWPORT &amp; MOBILE TOUCH INTEGRATION</text>
+
+      <g transform="translate(14, 32)">
+        <!-- Aspect Ratio Container -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="320" height="110" rx="6" fill="#191122" stroke="#EC4899" stroke-width="1" stroke-opacity="0.4" />
+          <text x="12" y="20" fill="#F472B6" font-size="11" font-weight="700" class="font-sans">Flex-1 / Min-H-0 Viewport Clamping</text>
+          <text x="12" y="38" fill="#E2E8F0" font-size="10" class="font-sans">• CSS: aspect-[16/9] object-contain</text>
+          <text x="12" y="54" fill="#E2E8F0" font-size="10" class="font-sans">• flex-1 min-h-0 prevents bottom bar overflow</text>
+          <text x="12" y="70" fill="#E2E8F0" font-size="10" class="font-sans">• Preserves true 16:9 aspect ratio on all displays</text>
+          <text x="12" y="86" fill="#94A3B8" font-size="9" class="font-mono">Desktop, Ultra-wide &amp; Mobile screens</text>
+        </g>
+
+        <!-- Virtual D-Pad Touch System -->
+        <g transform="translate(336, 0)">
+          <rect x="0" y="0" width="320" height="110" rx="6" fill="#191122" stroke="#EC4899" stroke-width="1" stroke-opacity="0.4" />
+          <text x="12" y="20" fill="#F472B6" font-size="11" font-weight="700" class="font-sans">Virtual D-Pad Touch System (VirtualDPad.tsx)</text>
+          <text x="12" y="38" fill="#E2E8F0" font-size="10" class="font-sans">• CSS: touch-none select-none prevents scroll/zoom</text>
+          <text x="12" y="54" fill="#E2E8F0" font-size="10" class="font-sans">• e.preventDefault() on touchstart/touchend</text>
+          <text x="12" y="70" fill="#E2E8F0" font-size="10" class="font-sans">• Desktop D-Pad Toggle button for touch laptops</text>
+          <text x="12" y="86" fill="#00F0FF" font-size="9" class="font-mono">Auto-enabled on mobile (&lt; 768px viewport)</text>
+        </g>
+
+        <!-- Architecture Summary Banner -->
+        <g transform="translate(0, 122)">
+          <rect x="0" y="0" width="656" height="120" rx="6" fill="#111827" stroke="#1E293B" stroke-width="1" />
+          <text x="14" y="24" fill="#FFFFFF" font-size="12" font-weight="700" class="font-sans">Architectural Takeaway for High-Performance Web Games</text>
+          <text x="14" y="48" fill="#94A3B8" font-size="10.5" class="font-sans">By decoupling the 60 Hz Canvas pipeline from the React component tree and offloading physics calculation</text>
+          <text x="14" y="68" fill="#94A3B8" font-size="10.5" class="font-sans">to the Node.js server tick loop, Nexus Arena achieves zero input stutter and rock-solid cheat resistance</text>
+          <text x="14" y="88" fill="#34D399" font-size="10" font-weight="600" class="font-mono">even over variable mobile networks and low-end mobile browser hardware.</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== FOOTER ==================== -->
+  <g transform="translate(60, 1148)">
+    <rect x="0" y="0" width="1480" height="32" rx="6" fill="#090D16" stroke="#1E293B" stroke-width="1" />
+    <text x="24" y="20" fill="#64748B" font-size="10" font-weight="700" class="font-mono">DESIGN PHILOSOPHY:</text>
+    <text x="180" y="20" fill="#E2E8F0" font-size="11" class="font-sans">Deterministic Server Physics</text>
+    <circle cx="380" cy="16" r="2.5" fill="#334155" />
+    <text x="395" y="20" fill="#E2E8F0" font-size="11" class="font-sans">Polymorphic GameMode Contracts</text>
+    <circle cx="650" cy="16" r="2.5" fill="#334155" />
+    <text x="665" y="20" fill="#E2E8F0" font-size="11" class="font-sans">Zero React Reconciliation in 60 FPS Render Loop</text>
+    <circle cx="1070" cy="16" r="2.5" fill="#334155" />
+    <text x="1085" y="20" fill="#00F0FF" font-size="11" font-weight="600" class="font-mono">Adaptive Responsive Canvas Projection</text>
+  </g>
+</svg>

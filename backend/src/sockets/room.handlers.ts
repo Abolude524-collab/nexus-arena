@@ -1,7 +1,9 @@
 import { Server } from 'socket.io';
 import { AuthenticatedSocket } from '../middleware/auth.middleware.js';
 import { roomManager } from '../services/room.manager.js';
-import { createRoomSchema, joinRoomSchema } from '../shared/index.js';
+import { gameManager } from '../game/GameManager.js';
+import { createRoomSchema, joinRoomSchema, roomSpectatorSettingsSchema } from '../shared/index.js';
+import { emitRoomUpdate } from './channels.js';
 
 export const registerRoomHandlers = (io: Server, socket: AuthenticatedSocket): void => {
   const user = socket.data.user;
@@ -22,7 +24,7 @@ export const registerRoomHandlers = (io: Server, socket: AuthenticatedSocket): v
       (socket as any).currentRoomId = room.id;
 
       if (callback) callback({ success: true, room });
-      io.emit('room:updated', room);
+      emitRoomUpdate(io, room);
     } catch (err: any) {
       if (callback) callback({ success: false, error: err.message || 'Invalid room creation inputs' });
     }
@@ -48,7 +50,7 @@ export const registerRoomHandlers = (io: Server, socket: AuthenticatedSocket): v
         username: user.username,
       });
 
-      io.emit('room:updated', room);
+      emitRoomUpdate(io, room);
     } catch (err: any) {
       if (callback) callback({ success: false, error: err.message || 'Invalid room join inputs' });
     }
@@ -63,6 +65,9 @@ export const registerRoomHandlers = (io: Server, socket: AuthenticatedSocket): v
     (socket as any).currentRoomId = undefined;
 
     if (destroyed) {
+      gameManager.removeGame(roomId);
+      gameManager.notifySpectatorsMatchCancelled(roomId);
+      // The match is gone: this tombstone lets directories drop it without exposing details
       io.emit('room:updated', { id: roomId, status: 'CLOSED' } as any);
     } else if (room) {
       io.to(roomId).emit('room:player_left', {
@@ -70,7 +75,7 @@ export const registerRoomHandlers = (io: Server, socket: AuthenticatedSocket): v
         userId: user.userId,
         username: user.username,
       });
-      io.emit('room:updated', room);
+      emitRoomUpdate(io, room);
     }
   });
 
@@ -95,8 +100,7 @@ export const registerRoomHandlers = (io: Server, socket: AuthenticatedSocket): v
 
     try {
       const room = roomManager.setPlayerReady(roomId, user.userId, payload.ready);
-      io.to(roomId).emit('room:updated', room);
-      io.emit('room:updated', room);
+      emitRoomUpdate(io, room);
     } catch (err: any) {
       socket.emit('system:error', { message: err.message });
     }
@@ -108,8 +112,7 @@ export const registerRoomHandlers = (io: Server, socket: AuthenticatedSocket): v
 
     try {
       const room = roomManager.kickPlayer(roomId, user.userId, payload.targetUserId);
-      io.to(roomId).emit('room:updated', room);
-      io.emit('room:updated', room);
+      emitRoomUpdate(io, room);
 
       // Notify kicked socket
       const roomSockets = io.sockets.adapter.rooms.get(roomId);
@@ -128,6 +131,41 @@ export const registerRoomHandlers = (io: Server, socket: AuthenticatedSocket): v
     }
   });
 
+  socket.on('room:spectator_settings', (payload) => {
+    const roomId = (socket as any).currentRoomId;
+    if (!roomId) return;
+
+    try {
+      const validated = roomSpectatorSettingsSchema.parse(payload || {});
+      const room = roomManager.setSpectatorSettings(roomId, user.userId, validated);
+
+      // Disabling spectating immediately removes everyone currently watching
+      if (!room.allowSpectators) {
+        gameManager.evictSpectators(roomId, 'Spectating was disabled by the host');
+      }
+
+      const fresh = roomManager.getRoomDTO(roomId) || room;
+      emitRoomUpdate(io, fresh);
+    } catch (err: any) {
+      socket.emit('system:error', { message: err.message || 'Unable to update spectator settings' });
+    }
+  });
+
+  socket.on('room:spectator_code', (payload, callback) => {
+    const roomId = (socket as any).currentRoomId;
+    if (!roomId) {
+      if (callback) callback({ success: false, error: 'You are not in a room' });
+      return;
+    }
+
+    try {
+      const code = roomManager.getSpectatorAccessCode(roomId, user.userId, !!payload?.rotate);
+      if (callback) callback({ success: true, code });
+    } catch (err: any) {
+      if (callback) callback({ success: false, error: err.message || 'Unable to fetch spectator code' });
+    }
+  });
+
   socket.on('disconnect', () => {
     const roomId = (socket as any).currentRoomId;
     if (!roomId) return;
@@ -140,7 +178,7 @@ export const registerRoomHandlers = (io: Server, socket: AuthenticatedSocket): v
         userId: user.userId,
         username: user.username,
       });
-      io.emit('room:updated', room);
+      emitRoomUpdate(io, room);
     }
   });
 };

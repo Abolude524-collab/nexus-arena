@@ -8,6 +8,7 @@ import {
   MatchResult,
   PlayerResult,
   PlayerInput,
+  SpectatorGameState,
 } from '../shared/index.js';
 
 const TOTAL_ROUNDS = 10;
@@ -212,6 +213,42 @@ export class ReactionRush implements GameMode {
       roundWinnerId: this.roundWinnerId,
       roundWinnerName: this.roundWinnerName,
       roundWinnerMs: this.roundWinnerMs,
+    };
+  }
+
+  public getSpectatorState(): SpectatorGameState {
+    const state = this.getState();
+    const revealRoundResult = state.status === 'ROUND_RESULT' || state.status === 'FINISHED';
+
+    return {
+      roomId: this.roomId,
+      gameType: 'Reaction Rush',
+      status: state.status,
+      serverTime: Date.now(),
+      state: {
+        status: state.status,
+        currentRound: state.currentRound,
+        totalRounds: state.totalRounds,
+        // Hidden server timing (activatedAt/expiresAt) is never sent to spectators
+        target:
+          state.status === 'TARGET_ACTIVE' && state.target
+            ? {
+                id: state.target.id,
+                x: state.target.x,
+                y: state.target.y,
+                radius: state.target.radius,
+              }
+            : null,
+        players: state.players.map((p) => ({
+          id: p.id,
+          username: p.username,
+          score: p.score,
+          lastReactionMs: revealRoundResult ? p.lastReactionMs : undefined,
+        })),
+        roundWinnerId: revealRoundResult ? state.roundWinnerId : null,
+        roundWinnerName: revealRoundResult ? state.roundWinnerName : null,
+        roundWinnerMs: revealRoundResult ? state.roundWinnerMs : null,
+      },
     };
   }
 

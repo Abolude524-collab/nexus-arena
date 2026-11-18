@@ -1,16 +1,41 @@
 import { Request, Response, NextFunction } from 'express';
 import { Socket } from 'socket.io';
+import { randomBytes } from 'crypto';
 import { AuthService, JwtPayload } from '../services/auth.service.js';
 
 export interface AuthenticatedRequest extends Request {
   user?: JwtPayload;
 }
 
+/**
+ * Lightweight identity for anonymous viewers. It only ever authorises spectator
+ * work: it is never persisted, never earns XP, and never joins a player slot.
+ */
+export interface GuestSession {
+  id: string;
+  label: string;
+  createdAt: number;
+}
+
 export interface AuthenticatedSocket extends Socket {
   data: {
     user?: JwtPayload;
+    guest?: GuestSession;
   };
 }
+
+let guestCounter = 0;
+
+/** A temporary, unique handle scoped to one socket connection. */
+export const createGuestSession = (): GuestSession => {
+  const entropy = randomBytes(6).toString('hex').toUpperCase();
+  guestCounter += 1;
+  return {
+    id: `guest_${entropy}${guestCounter.toString(36)}`,
+    label: `GUEST-${entropy.slice(-4)}`,
+    createdAt: Date.now(),
+  };
+};
 
 export const authenticateHttp = (
   req: AuthenticatedRequest,
@@ -52,7 +77,9 @@ export const authenticateSocket = (
     }
 
     if (!token) {
-      return next(new Error('Authentication error: Missing token'));
+      // Watching is open to everyone: an anonymous handshake becomes a guest session
+      socket.data.guest = createGuestSession();
+      return next();
     }
 
     const payload = AuthService.verifyToken(token);

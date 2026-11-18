@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
-import { Gamepad2, Zap, Users, Trophy, Github, LogOut, Shield, Target, Type, ArrowRight, Menu, X, User } from 'lucide-react';
+import { Gamepad2, Zap, Users, Trophy, Github, LogOut, Shield, Target, Type, ArrowRight, Menu, X, User, Eye } from 'lucide-react';
 import { LevelUpPayload } from './shared/index.js';
 import { useAuthStore } from './store/authStore';
 import { useRoomStore } from './store/roomStore';
@@ -13,9 +13,13 @@ import { LeaderboardView } from './components/leaderboard/LeaderboardView';
 import { ProfileView } from './components/profile/ProfileView';
 import { AdminDashboardView } from './components/admin/AdminDashboardView';
 import { LevelUpModal } from './components/progression/LevelUpModal';
+import { WatchView } from './components/watch/WatchView';
+import { SpectatorView } from './components/watch/SpectatorView';
+import { MatchLiveNotifications } from './components/watch/MatchLiveNotifications';
+import { useAuthPromptStore } from './store/authPromptStore';
 
 export const App: React.FC = () => {
-  const { user, isAuthenticated, checkAuth, logout } = useAuthStore();
+  const { user, token, isAuthenticated, checkAuth, logout } = useAuthStore();
   const { currentRoom, initSocketListeners, fetchRooms, restoreMyRoom } = useRoomStore();
   const { initGameSocketListeners } = useGameStore();
 
@@ -31,7 +35,7 @@ export const App: React.FC = () => {
   // Backward compatibility: redirect any incoming legacy hashtags (/#lobby -> /lobby)
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
-    if (hash === 'lobby' || hash === 'leaderboard' || hash === 'profile' || hash === 'admin') {
+    if (hash === 'lobby' || hash === 'watch' || hash === 'leaderboard' || hash === 'profile' || hash === 'admin') {
       navigate(`/${hash}`, { replace: true });
     }
   }, [navigate]);
@@ -39,6 +43,25 @@ export const App: React.FC = () => {
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  // Watching never requires a session, so the realtime channel exists for guests
+  // too. Switching identity re-handshakes in place instead of dropping the view.
+  useEffect(() => {
+    socketService.connect(token);
+  }, [token]);
+
+  // Explicit guest clicks (chat, follow, alerts) open the auth modal; nothing
+  // opens on its own, so an active match is never interrupted.
+  const pendingAuthPrompt = useAuthPromptStore((state) => state.pending);
+  const clearAuthPrompt = useAuthPromptStore((state) => state.clearRequest);
+
+  useEffect(() => {
+    if (!pendingAuthPrompt || isAuthenticated) return;
+    openAuth(pendingAuthPrompt === 'chat' ? 'login' : 'register');
+    clearAuthPrompt();
+    // openAuth only touches local state
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingAuthPrompt, isAuthenticated, clearAuthPrompt]);
 
   useEffect(() => {
     fetchRooms();
@@ -118,6 +141,14 @@ export const App: React.FC = () => {
               }`}
             >
               PLAY
+            </button>
+            <button
+              onClick={() => navigate('/watch')}
+              className={`transition-colors hover:text-nexus-cyan cursor-pointer flex items-center gap-1.5 ${
+                pathname === '/watch' || pathname.startsWith('/watch/') ? 'text-white font-bold' : ''
+              }`}
+            >
+              <Eye className="w-4 h-4" /> WATCH
             </button>
             <button
               onClick={() => navigate('/leaderboard')}
@@ -262,6 +293,21 @@ export const App: React.FC = () => {
                 >
                   <Gamepad2 className="w-5 h-5" />
                   PLAY / LOBBY
+                </button>
+
+                <button
+                  onClick={() => {
+                    navigate('/watch');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-btn transition-all text-left cursor-pointer ${
+                    pathname === '/watch' || pathname.startsWith('/watch/')
+                      ? 'bg-nexus-accent text-white font-bold glow-accent'
+                      : 'text-nexus-muted hover:text-white hover:bg-nexus-card'
+                  }`}
+                >
+                  <Eye className="w-5 h-5" />
+                  WATCH ARENA
                 </button>
 
                 <button
@@ -678,6 +724,8 @@ export const App: React.FC = () => {
               path="/lobby"
               element={isAuthenticated ? <LobbyView /> : <Navigate to="/" replace />}
             />
+            <Route path="/watch" element={<WatchView />} />
+            <Route path="/watch/:matchId" element={<SpectatorView />} />
             <Route path="/leaderboard" element={<LeaderboardView />} />
             <Route
               path="/profile"
@@ -702,12 +750,16 @@ export const App: React.FC = () => {
         isOpen={isAuthModalOpen}
         onClose={() => {
           setIsAuthModalOpen(false);
-          if (useAuthStore.getState().isAuthenticated) {
+          // Signing in from the WATCH flow returns the visitor to what they were
+          // watching instead of pulling them out of the match.
+          if (useAuthStore.getState().isAuthenticated && !pathname.startsWith('/watch')) {
             navigate('/lobby');
           }
         }}
         initialMode={authMode}
       />
+
+      <MatchLiveNotifications />
 
       <LevelUpModal
         payload={levelUpPayload}

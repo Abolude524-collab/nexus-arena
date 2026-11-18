@@ -78,7 +78,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   logout: () => {
     localStorage.removeItem('nexus_token');
-    socketService.disconnect();
+    // Dropping a session must not drop the channel: the viewer becomes a guest
+    socketService.connect(null);
     set({ token: null, user: null, isAuthenticated: false, error: null });
   },
 
@@ -103,7 +104,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ user: data.user, isAuthenticated: true, isLoading: false });
     } catch (_err) {
       localStorage.removeItem('nexus_token');
-      socketService.disconnect();
+      socketService.connect(null);
       set({ token: null, user: null, isAuthenticated: false, isLoading: false });
     }
   },

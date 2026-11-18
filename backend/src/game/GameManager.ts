@@ -7,22 +7,31 @@ import { WordBlitz } from './WordBlitz.js';
 import { PlayerInput } from '../shared/index.js';
 import { MatchService } from '../services/match.service.js';
 import { roomManager } from '../services/room.manager.js';
+import { followService } from '../services/follow.service.js';
+import { emitRoomUpdate, spectateChannel } from '../sockets/channels.js';
 
 const TICK_RATE = 60;
 const TICK_INTERVAL_MS = 1000 / TICK_RATE;
+// Spectators do not need the full 60Hz authoritative tick; 10Hz keeps the view smooth.
+const SPECTATOR_BROADCAST_INTERVAL_MS = 100;
+
+// Mirrors the room registry: active matches and their tick timers must be
+// shared even if this module is evaluated twice (test runners, bundler cycles).
+const gameRegistry = globalThis as typeof globalThis & {
+  __nexusGameManager?: GameManager;
+};
 
 export class GameManager {
-  private static instance: GameManager;
   private io: Server | null = null;
   private activeGames: Map<string, { game: GameMode; timer: NodeJS.Timeout }> = new Map();
 
   private constructor() {}
 
   public static getInstance(): GameManager {
-    if (!GameManager.instance) {
-      GameManager.instance = new GameManager();
+    if (!gameRegistry.__nexusGameManager) {
+      gameRegistry.__nexusGameManager = new GameManager();
     }
-    return GameManager.instance;
+    return gameRegistry.__nexusGameManager;
   }
 
   public setSocketServer(io: Server): void {
@@ -53,16 +62,30 @@ export class GameManager {
     // Update room status in room manager and DB
     const updatedRoom = roomManager.updateStatus(roomId, 'PLAYING');
 
-    // Broadcast room:updated to ALL players in room and global lobby
+    // Broadcast room:updated to the room and, when public, the global lobby
     if (this.io) {
-      this.io.to(roomId).emit('room:updated', updatedRoom);
-      this.io.emit('room:updated', updatedRoom);
+      emitRoomUpdate(this.io, updatedRoom);
 
       // Immediately emit initial state snapshot
       this.io.to(roomId).emit('game:state', game.getState());
+      this.io.to(spectateChannel(roomId)).emit('spectator:game_state', game.getSpectatorState());
+
+      // Registered followers are notified once, off the game loop, and never mid-match
+      followService
+        .notifyMatchLive(
+          this.io,
+          roomId,
+          updatedRoom.name,
+          updatedRoom.gameType,
+          updatedRoom.players.map((p) => ({ id: p.id, username: p.username })),
+        )
+        .catch(() => {
+          // Notifications are best-effort and must never block a match start
+        });
     }
 
     let lastTick = Date.now();
+    let lastSpectatorBroadcast = Date.now();
 
     const timer = setInterval(() => {
       const now = Date.now();
@@ -74,6 +97,13 @@ export class GameManager {
 
       if (this.io) {
         this.io.to(roomId).emit('game:state', state);
+
+        if (now - lastSpectatorBroadcast >= SPECTATOR_BROADCAST_INTERVAL_MS) {
+          lastSpectatorBroadcast = now;
+          this.io
+            .to(spectateChannel(roomId))
+            .emit('spectator:game_state', game.getSpectatorState());
+        }
       }
 
       if (game.isFinished()) {
@@ -118,13 +148,42 @@ export class GameManager {
     const updatedRoom = roomManager.updateStatus(roomId, 'FINISHED');
 
     if (this.io) {
-      this.io.to(roomId).emit('room:updated', updatedRoom);
-      this.io.emit('room:updated', updatedRoom);
+      emitRoomUpdate(this.io, updatedRoom);
       this.io.to(roomId).emit('game:ended', results);
+      this.io.to(spectateChannel(roomId)).emit('spectator:match_ended', {
+        roomId,
+        cancelled: false,
+        results,
+      });
+      this.io.in(spectateChannel(roomId)).socketsLeave(spectateChannel(roomId));
     }
+
+    roomManager.clearSpectators(roomId);
 
     // Persist results asynchronously
     MatchService.persistMatchResult(results);
+  }
+
+  /** Notify spectators that a match was cancelled (room closed / host ended it). */
+  public notifySpectatorsMatchCancelled(roomId: string): void {
+    if (this.io) {
+      this.io.to(spectateChannel(roomId)).emit('spectator:match_ended', {
+        roomId,
+        cancelled: true,
+        results: null,
+      });
+      this.io.in(spectateChannel(roomId)).socketsLeave(spectateChannel(roomId));
+    }
+    roomManager.clearSpectators(roomId);
+  }
+
+  /** Remove all spectators from a live match (e.g. the host disabled spectating). */
+  public evictSpectators(roomId: string, reason: string): void {
+    if (this.io) {
+      this.io.to(spectateChannel(roomId)).emit('spectator:left', { roomId, reason });
+      this.io.in(spectateChannel(roomId)).socketsLeave(spectateChannel(roomId));
+    }
+    roomManager.clearSpectators(roomId);
   }
 
   public getGame(roomId: string): GameMode | undefined {

@@ -9,6 +9,7 @@ import { ReactionRushView } from './ReactionRushView';
 import { TerritoryView } from './TerritoryView';
 import { WordBlitzView } from './WordBlitzView';
 import { VirtualDPad } from './VirtualDPad';
+import { HostWatchShare } from '../room/HostWatchShare';
 
 export const GameView: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -147,6 +148,7 @@ export const GameView: React.FC = () => {
     if (gameType === 'Reaction Rush') {
       return (
         <>
+          <HostWatchShare />
           <ReactionRushView gameState={gameState as any} />
           {matchResults && <MatchResultsModal results={matchResults} onExit={handleExitMatch} />}
         </>
@@ -156,6 +158,7 @@ export const GameView: React.FC = () => {
     if (gameType === 'Territory') {
       return (
         <>
+          <HostWatchShare />
           <TerritoryView gameState={gameState as any} />
           {matchResults && <MatchResultsModal results={matchResults} onExit={handleExitMatch} />}
         </>
@@ -165,6 +168,7 @@ export const GameView: React.FC = () => {
     if (gameType === 'Word Blitz') {
       return (
         <>
+          <HostWatchShare />
           <WordBlitzView gameState={gameState as any} />
           {matchResults && <MatchResultsModal results={matchResults} onExit={handleExitMatch} />}
         </>
@@ -183,6 +187,7 @@ export const GameView: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 bg-nexus-bg flex flex-col justify-between p-2 md:p-4 overflow-hidden selection:bg-none">
+      <HostWatchShare />
       {/* Top HUD */}
       <div className="flex items-center justify-between bg-nexus-surface/90 border border-nexus-border backdrop-blur px-3 md:px-6 py-2 md:py-3 rounded-card z-10 shrink-0">
         <div className="flex items-center gap-3 md:gap-6">

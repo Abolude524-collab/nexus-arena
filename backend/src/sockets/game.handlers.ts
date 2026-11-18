@@ -7,8 +7,20 @@ export const registerGameHandlers = (_io: Server, socket: AuthenticatedSocket): 
   const user = socket.data.user;
   if (!user) return;
 
-  socket.on('game:start', () => {
+  /**
+   * Player-only actions require membership of the room channel. Spectator sockets
+   * only ever join the separate spectate channel, so they are rejected here even
+   * if they forge a room id in the payload.
+   */
+  const playerRoomId = (): string | undefined => {
     const roomId = (socket as any).currentRoomId;
+    if (!roomId) return undefined;
+    if (!socket.rooms.has(roomId)) return undefined;
+    return roomId;
+  };
+
+  socket.on('game:start', () => {
+    const roomId = playerRoomId();
     if (!roomId) return;
 
     const room = roomManager.getRoom(roomId);
@@ -36,21 +48,21 @@ export const registerGameHandlers = (_io: Server, socket: AuthenticatedSocket): 
   });
 
   socket.on('game:input', (input) => {
-    const roomId = (socket as any).currentRoomId;
+    const roomId = playerRoomId();
     if (!roomId) return;
 
     gameManager.handleInput(roomId, user.userId, input);
   });
 
   socket.on('reaction:click', (payload) => {
-    const roomId = (socket as any).currentRoomId;
+    const roomId = playerRoomId();
     if (!roomId || !payload) return;
 
     gameManager.handleReactionClick(roomId, user.userId, payload.roundId, payload.targetId);
   });
 
   socket.on('territory:input', (input) => {
-    const roomId = (socket as any).currentRoomId;
+    const roomId = playerRoomId();
     if (!roomId || !input) return;
 
     gameManager.handleInput(roomId, user.userId, {
@@ -63,7 +75,7 @@ export const registerGameHandlers = (_io: Server, socket: AuthenticatedSocket): 
   });
 
   socket.on('word:submit', (payload) => {
-    const roomId = (socket as any).currentRoomId;
+    const roomId = playerRoomId();
     if (!roomId || !payload) return;
 
     gameManager.handleWordSubmit(roomId, user.userId, payload.roundId, payload.answer);

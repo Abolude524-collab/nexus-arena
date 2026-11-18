@@ -6,6 +6,7 @@ import {
   MatchResult,
   PlayerResult,
   PlayerInput,
+  SpectatorGameState,
 } from '../shared/index.js';
 
 const TOTAL_ROUNDS = 10;
@@ -227,6 +228,45 @@ export class WordBlitz implements GameMode {
         correctCount: p.correctCount,
         lastResult: p.lastResult,
       })),
+    };
+  }
+
+  /**
+   * The challenge prompt is the correct answer, so it is withheld from spectators
+   * until the round has ended. Spectators only receive its length while live.
+   */
+  public getSpectatorState(): SpectatorGameState {
+    const state = this.getState();
+    const revealAnswer = state.status === 'ROUND_END' || state.status === 'FINISHED';
+    const challenge = state.challenge;
+
+    return {
+      roomId: this.roomId,
+      gameType: 'Word Blitz',
+      status: state.status,
+      serverTime: Date.now(),
+      state: {
+        status: state.status,
+        currentRound: state.currentRound,
+        totalRounds: state.totalRounds,
+        startedAt: state.startedAt,
+        endsAt: state.endsAt,
+        challenge: challenge
+          ? {
+              id: challenge.id,
+              difficulty: challenge.difficulty,
+              promptLength: challenge.prompt.length,
+              prompt: revealAnswer ? challenge.prompt : null,
+            }
+          : null,
+        players: state.players.map((p) => ({
+          id: p.id,
+          username: p.username,
+          score: p.score,
+          hasSubmitted: p.hasSubmitted,
+          correctCount: p.correctCount,
+        })),
+      },
     };
   }
 

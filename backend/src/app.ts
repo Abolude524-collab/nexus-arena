@@ -2,9 +2,11 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.routes.js';
 import roomRoutes from './routes/room.routes.js';
+import matchRoutes from './routes/match.routes.js';
 import leaderboardRoutes from './routes/leaderboard.routes.js';
 import statsRoutes from './routes/stats.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import socialRoutes from './routes/social.routes.js';
 
 export const createApp = (): Express => {
   const app = express();
@@ -46,8 +48,10 @@ export const createApp = (): Express => {
 
   app.use('/api/auth', authRoutes);
   app.use('/api/rooms', roomRoutes);
+  app.use('/api/matches', matchRoutes);
   app.use('/api/leaderboard', leaderboardRoutes);
   app.use('/api/stats', statsRoutes);
+  app.use('/api/social', socialRoutes);
   app.use('/api/admin', adminRoutes);
 
   // Global Error Handler

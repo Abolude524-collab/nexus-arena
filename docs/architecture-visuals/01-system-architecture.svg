@@ -1,0 +1,533 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bg-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06080F" />
+      <stop offset="50%" stop-color="#090D18" />
+      <stop offset="100%" stop-color="#04060A" />
+    </linearGradient>
+
+    <!-- Card Backgrounds -->
+    <linearGradient id="card-client-1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0E1726" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#0A0F1D" stop-opacity="0.98" />
+    </linearGradient>
+
+    <linearGradient id="card-server-1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#111827" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#0B0F19" stop-opacity="0.98" />
+    </linearGradient>
+
+    <linearGradient id="header-accent-1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F0FF" />
+      <stop offset="35%" stop-color="#8B5CF6" />
+      <stop offset="70%" stop-color="#EC4899" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="glow-cyan-1" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="drop-shadow-1" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.6" />
+    </filter>
+
+    <!-- Markers -->
+    <marker id="arrow-cyan-1" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#00F0FF" />
+    </marker>
+    <marker id="arrow-green-1" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#10B981" />
+    </marker>
+    <marker id="arrow-purple-1" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#A855F7" />
+    </marker>
+
+    <!-- Background Pattern -->
+    <pattern id="grid-dots-1" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#1E293B" fill-opacity="0.45" />
+    </pattern>
+  </defs>
+
+  <style>
+    .font-sans { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  </style>
+
+  <!-- Background -->
+  <rect width="1600" height="1200" fill="url(#bg-grad-1)" />
+  <rect width="1600" height="1200" fill="url(#grid-dots-1)" />
+
+  <!-- Ambient Light -->
+  <circle cx="250" cy="300" r="300" fill="#00F0FF" fill-opacity="0.03" filter="url(#glow-cyan-1)" />
+  <circle cx="1200" cy="400" r="320" fill="#8B5CF6" fill-opacity="0.03" />
+
+  <!-- ==================== TOP HEADER ==================== -->
+  <g transform="translate(60, 42)">
+    <!-- Topic Badges -->
+    <rect x="0" y="0" width="160" height="26" rx="6" fill="#00F0FF" fill-opacity="0.12" stroke="#00F0FF" stroke-width="1.2" stroke-opacity="0.4" />
+    <text x="80" y="17" fill="#00F0FF" font-size="11" font-weight="700" letter-spacing="1.5" text-anchor="middle" class="font-mono">SYSTEM OVERVIEW</text>
+
+    <rect x="172" y="0" width="200" height="26" rx="6" fill="#8B5CF6" fill-opacity="0.12" stroke="#8B5CF6" stroke-width="1.2" stroke-opacity="0.4" />
+    <text x="272" y="17" fill="#C084FC" font-size="11" font-weight="700" letter-spacing="1.5" text-anchor="middle" class="font-mono">MULTIPLAYER PLATFORM</text>
+
+    <rect x="384" y="0" width="170" height="26" rx="6" fill="#10B981" fill-opacity="0.12" stroke="#10B981" stroke-width="1.2" stroke-opacity="0.4" />
+    <text x="469" y="17" fill="#34D399" font-size="11" font-weight="700" letter-spacing="1.5" text-anchor="middle" class="font-mono">SERVER-AUTHORITATIVE</text>
+
+    <!-- Main Title -->
+    <text x="0" y="68" fill="#FFFFFF" font-size="32" font-weight="900" letter-spacing="1.2" class="font-sans">
+      NEXUS ARENA <tspan fill="#00F0FF">—</tspan> SYSTEM ARCHITECTURE
+    </text>
+    <!-- Subtitle -->
+    <text x="0" y="96" fill="#94A3B8" font-size="15" font-weight="400" letter-spacing="0.3" class="font-sans">
+      A look inside the engineering behind the multiplayer platform.
+    </text>
+
+    <!-- Stack Pill Group -->
+    <g transform="translate(980, 12)">
+      <rect x="0" y="0" width="500" height="42" rx="8" fill="#0F172A" stroke="#1E293B" stroke-width="1.2" />
+      <text x="18" y="26" fill="#64748B" font-size="11" font-weight="700" class="font-mono">STACK</text>
+      <text x="75" y="26" fill="#E2E8F0" font-size="12" font-weight="600" class="font-sans">React 18</text>
+      <circle cx="140" cy="22" r="2.5" fill="#334155" />
+      <text x="155" y="26" fill="#E2E8F0" font-size="12" font-weight="600" class="font-sans">TypeScript</text>
+      <circle cx="230" cy="22" r="2.5" fill="#334155" />
+      <text x="245" y="26" fill="#E2E8F0" font-size="12" font-weight="600" class="font-sans">Node / Express</text>
+      <circle cx="345" cy="22" r="2.5" fill="#334155" />
+      <text x="360" y="26" fill="#00F0FF" font-size="12" font-weight="600" class="font-sans">Socket.IO</text>
+      <circle cx="430" cy="22" r="2.5" fill="#334155" />
+      <text x="445" y="26" fill="#A855F7" font-size="12" font-weight="600" class="font-sans">Prisma</text>
+    </g>
+  </g>
+
+  <!-- Divider Line -->
+  <line x1="60" y1="162" x2="1540" y2="162" stroke="url(#header-accent-1)" stroke-width="2" stroke-opacity="0.8" />
+
+  <!-- ==================== TIER 1: CLIENT TIER (FRONTEND) ==================== -->
+  <g transform="translate(60, 182)">
+    <!-- Container -->
+    <rect x="0" y="0" width="440" height="950" rx="12" fill="url(#card-client-1)" stroke="#1E293B" stroke-width="1.5" filter="url(#drop-shadow-1)" />
+
+    <!-- Header Box -->
+    <rect x="16" y="14" width="408" height="40" rx="6" fill="#0F172A" stroke="#00F0FF" stroke-width="1.2" stroke-opacity="0.3" />
+    <circle cx="34" cy="34" r="5" fill="#00F0FF" />
+    <text x="48" y="39" fill="#FFFFFF" font-size="14" font-weight="800" letter-spacing="0.5" class="font-sans">CLIENT APPLICATION TIER</text>
+    <rect x="320" y="23" width="92" height="22" rx="4" fill="#00F0FF" fill-opacity="0.15" />
+    <text x="366" y="38" fill="#00F0FF" font-size="10" font-weight="700" text-anchor="middle" class="font-mono">NETLIFY SPA</text>
+
+    <!-- Box 1: Player Runtime & Input Modes -->
+    <g transform="translate(16, 68)">
+      <rect x="0" y="0" width="408" height="92" rx="8" fill="#0A0E18" stroke="#1E293B" stroke-width="1" />
+      <text x="14" y="22" fill="#38BDF8" font-size="11" font-weight="700" class="font-mono">PLAYER RUNTIME &amp; INPUT CONTROLS</text>
+
+      <g transform="translate(14, 32)">
+        <rect x="0" y="0" width="185" height="48" rx="6" fill="#131D33" stroke="#253556" stroke-width="1" />
+        <text x="10" y="20" fill="#FFFFFF" font-size="11" font-weight="600" class="font-sans">Desktop / Laptop</text>
+        <text x="10" y="36" fill="#94A3B8" font-size="9" class="font-mono">WASD / Arrow Keys</text>
+
+        <rect x="195" y="0" width="185" height="48" rx="6" fill="#131D33" stroke="#253556" stroke-width="1" />
+        <text x="10" y="20" fill="#FFFFFF" font-size="11" font-weight="600" class="font-sans">Mobile / Touch</text>
+        <text x="10" y="36" fill="#00F0FF" font-size="9" class="font-mono">VirtualDPad.tsx (Touch-none)</text>
+      </g>
+    </g>
+
+    <!-- Box 2: React 18 UI & Routing Structure -->
+    <g transform="translate(16, 172)">
+      <rect x="0" y="0" width="408" height="220" rx="8" fill="#0A0E18" stroke="#1E293B" stroke-width="1" />
+      <text x="14" y="22" fill="#E2E8F0" font-size="11" font-weight="700" class="font-mono">REACT 18 UI &amp; ROUTER V6 (/pages)</text>
+
+      <g transform="translate(14, 34)">
+        <rect x="0" y="0" width="185" height="44" rx="6" fill="#131D33" stroke="#1E293B" stroke-width="1" />
+        <text x="10" y="18" fill="#FFFFFF" font-size="11" font-weight="600" class="font-sans">LobbyView.tsx</text>
+        <text x="10" y="32" fill="#64748B" font-size="9" class="font-mono">/lobby • Search &amp; Join</text>
+
+        <rect x="195" y="0" width="185" height="44" rx="6" fill="#131D33" stroke="#1E293B" stroke-width="1" />
+        <text x="10" y="18" fill="#FFFFFF" font-size="11" font-weight="600" class="font-sans">WaitingRoomView.tsx</text>
+        <text x="10" y="32" fill="#64748B" font-size="9" class="font-mono">Roster • Min 2 Players</text>
+
+        <rect x="0" y="52" width="185" height="44" rx="6" fill="#131D33" stroke="#1E293B" stroke-width="1" />
+        <text x="10" y="18" fill="#FFFFFF" font-size="11" font-weight="600" class="font-sans">LeaderboardView.tsx</text>
+        <text x="10" y="32" fill="#64748B" font-size="9" class="font-mono">/leaderboard • Global XP</text>
+
+        <rect x="195" y="52" width="185" height="44" rx="6" fill="#131D33" stroke="#1E293B" stroke-width="1" />
+        <text x="10" y="18" fill="#FFFFFF" font-size="11" font-weight="600" class="font-sans">ProfileView.tsx</text>
+        <text x="10" y="32" fill="#64748B" font-size="9" class="font-mono">/profile • Stats &amp; Match Log</text>
+
+        <rect x="0" y="104" width="380" height="46" rx="6" fill="#16223B" stroke="#00F0FF" stroke-width="1" stroke-opacity="0.4" />
+        <text x="12" y="19" fill="#00F0FF" font-size="11" font-weight="700" class="font-sans">GameView.tsx (Dynamic Game Shell)</text>
+        <text x="12" y="34" fill="#94A3B8" font-size="9" class="font-mono">Mounts NeonDash Canvas, ReactionRush, Territory, WordBlitz</text>
+
+        <rect x="0" y="158" width="185" height="44" rx="6" fill="#131D33" stroke="#1E293B" stroke-width="1" />
+        <text x="10" y="18" fill="#FFFFFF" font-size="11" font-weight="600" class="font-sans">ChatPanel.tsx</text>
+        <text x="10" y="32" fill="#64748B" font-size="9" class="font-mono">In-room live chat</text>
+
+        <rect x="195" y="158" width="185" height="44" rx="6" fill="#131D33" stroke="#1E293B" stroke-width="1" />
+        <text x="10" y="18" fill="#FFFFFF" font-size="11" font-weight="600" class="font-sans">AdminDashboard.tsx</text>
+        <text x="10" y="32" fill="#64748B" font-size="9" class="font-mono">/admin • Metrics &amp; Purge</text>
+      </g>
+    </g>
+
+    <!-- Box 3: Client State Management (Zustand Stores) -->
+    <g transform="translate(16, 404)">
+      <rect x="0" y="0" width="408" height="168" rx="8" fill="#0A0E18" stroke="#1E293B" stroke-width="1" />
+      <text x="14" y="22" fill="#C084FC" font-size="11" font-weight="700" class="font-mono">CLIENT REACTIVE STATE (ZUSTAND STORES)</text>
+
+      <g transform="translate(14, 34)">
+        <!-- useGameStore -->
+        <rect x="0" y="0" width="120" height="120" rx="6" fill="#141829" stroke="#8B5CF6" stroke-width="1" stroke-opacity="0.4" />
+        <text x="10" y="18" fill="#C084FC" font-size="11" font-weight="700" class="font-sans">useGameStore</text>
+        <text x="10" y="38" fill="#E2E8F0" font-size="9" class="font-mono">• gameState</text>
+        <text x="10" y="56" fill="#E2E8F0" font-size="9" class="font-mono">• sequence ++</text>
+        <text x="10" y="74" fill="#E2E8F0" font-size="9" class="font-mono">• sendInput()</text>
+        <text x="10" y="92" fill="#E2E8F0" font-size="9" class="font-mono">• matchResults</text>
+        <text x="10" y="110" fill="#E2E8F0" font-size="9" class="font-mono">• clearGame()</text>
+
+        <!-- useRoomStore -->
+        <rect x="130" y="0" width="120" height="120" rx="6" fill="#141829" stroke="#8B5CF6" stroke-width="1" stroke-opacity="0.4" />
+        <text x="10" y="18" fill="#C084FC" font-size="11" font-weight="700" class="font-sans">useRoomStore</text>
+        <text x="10" y="38" fill="#E2E8F0" font-size="9" class="font-mono">• currentRoom</text>
+        <text x="10" y="56" fill="#E2E8F0" font-size="9" class="font-mono">• rooms[] list</text>
+        <text x="10" y="74" fill="#E2E8F0" font-size="9" class="font-mono">• joinRoom()</text>
+        <text x="10" y="92" fill="#E2E8F0" font-size="9" class="font-mono">• toggleReady()</text>
+        <text x="10" y="110" fill="#E2E8F0" font-size="9" class="font-mono">• onlineCount</text>
+
+        <!-- useAuthStore -->
+        <rect x="260" y="0" width="120" height="120" rx="6" fill="#141829" stroke="#8B5CF6" stroke-width="1" stroke-opacity="0.4" />
+        <text x="10" y="18" fill="#C084FC" font-size="11" font-weight="700" class="font-sans">useAuthStore</text>
+        <text x="10" y="38" fill="#E2E8F0" font-size="9" class="font-mono">• user profile</text>
+        <text x="10" y="56" fill="#E2E8F0" font-size="9" class="font-mono">• JWT token</text>
+        <text x="10" y="74" fill="#E2E8F0" font-size="9" class="font-mono">• checkAuth()</text>
+        <text x="10" y="92" fill="#E2E8F0" font-size="9" class="font-mono">• login/logout</text>
+        <text x="10" y="110" fill="#E2E8F0" font-size="9" class="font-mono">• autoLogin</text>
+      </g>
+    </g>
+
+    <!-- Box 4: Canvas Rendering Engine -->
+    <g transform="translate(16, 584)">
+      <rect x="0" y="0" width="408" height="188" rx="8" fill="#0A0E18" stroke="#1E293B" stroke-width="1" />
+      <text x="14" y="22" fill="#34D399" font-size="11" font-weight="700" class="font-mono">BROWSER RENDERING ENGINE</text>
+
+      <g transform="translate(14, 34)">
+        <rect x="0" y="0" width="380" height="140" rx="6" fill="#0C1B20" stroke="#10B981" stroke-width="1" stroke-opacity="0.4" />
+        <text x="12" y="20" fill="#34D399" font-size="12" font-weight="700" class="font-sans">CanvasRenderer.ts (HTML5 Canvas 2D)</text>
+        
+        <text x="12" y="42" fill="#E2E8F0" font-size="10" class="font-sans">• Virtual Space: 1600 × 900 px aspect ratio</text>
+        <text x="12" y="60" fill="#E2E8F0" font-size="10" class="font-sans">• 60 FPS Decoupled Loop: zero React state re-render</text>
+        <text x="12" y="78" fill="#E2E8F0" font-size="10" class="font-sans">• Multi-Stage: 40px grid ➔ Obstacles ➔ Orbs ➔ Avatars</text>
+        <text x="12" y="96" fill="#E2E8F0" font-size="10" class="font-sans">• Local Player: highlighted with cyan aura ring (#22D3EE)</text>
+        <text x="12" y="116" fill="#94A3B8" font-size="9" class="font-mono">• ReactionRush / Territory / WordBlitz: DOM &amp; SVG</text>
+        <text x="12" y="132" fill="#00F0FF" font-size="9" class="font-mono">• Layout: flex-1 min-h-0 prevents viewport overflow</text>
+      </g>
+    </g>
+
+    <!-- Box 5: Client Network Adapters -->
+    <g transform="translate(16, 784)">
+      <rect x="0" y="0" width="408" height="150" rx="8" fill="#0A0E18" stroke="#1E293B" stroke-width="1" />
+      <text x="14" y="22" fill="#00F0FF" font-size="11" font-weight="700" class="font-mono">CLIENT NETWORK ADAPTERS</text>
+
+      <g transform="translate(14, 34)">
+        <!-- SocketService -->
+        <rect x="0" y="0" width="185" height="102" rx="6" fill="#0E1A29" stroke="#00F0FF" stroke-width="1" stroke-opacity="0.4" />
+        <text x="10" y="18" fill="#00F0FF" font-size="11" font-weight="700" class="font-sans">SocketService.ts</text>
+        <text x="10" y="36" fill="#E2E8F0" font-size="9" class="font-mono">• socket.io-client</text>
+        <text x="10" y="52" fill="#E2E8F0" font-size="9" class="font-mono">• Transports: WSS / Poll</text>
+        <text x="10" y="68" fill="#E2E8F0" font-size="9" class="font-mono">• Auth: { token }</text>
+        <text x="10" y="84" fill="#E2E8F0" font-size="9" class="font-mono">• Auto Reconnect</text>
+
+        <!-- Fetch REST -->
+        <rect x="195" y="0" width="185" height="102" rx="6" fill="#0C1B1B" stroke="#10B981" stroke-width="1" stroke-opacity="0.4" />
+        <text x="10" y="18" fill="#34D399" font-size="11" font-weight="700" class="font-sans">Fetch REST Client</text>
+        <text x="10" y="36" fill="#E2E8F0" font-size="9" class="font-mono">• Native fetch() API</text>
+        <text x="10" y="52" fill="#E2E8F0" font-size="9" class="font-mono">• Bearer Token Header</text>
+        <text x="10" y="68" fill="#E2E8F0" font-size="9" class="font-mono">• Content-Type: json</text>
+        <text x="10" y="84" fill="#E2E8F0" font-size="9" class="font-mono">• VITE_SERVER_URL</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== MIDDLE: TRANSPORT & PROTOCOL BUS ==================== -->
+  <g transform="translate(525, 182)">
+    <!-- Header -->
+    <text x="110" y="14" fill="#94A3B8" font-size="11" font-weight="700" letter-spacing="1.5" text-anchor="middle" class="font-mono">COMMUNICATION BUS</text>
+
+    <!-- Channel A: HTTP REST API Endpoints -->
+    <g transform="translate(0, 26)">
+      <rect x="0" y="0" width="220" height="295" rx="8" fill="#091417" stroke="#10B981" stroke-width="1.2" stroke-opacity="0.6" />
+      <text x="110" y="22" fill="#34D399" font-size="11" font-weight="700" text-anchor="middle" class="font-mono">HTTP / REST CHANNELS</text>
+      <line x1="12" y1="32" x2="208" y2="32" stroke="#1E293B" stroke-width="1" />
+
+      <g transform="translate(14, 48)">
+        <text x="0" y="0" fill="#64748B" font-size="9" font-weight="700" class="font-mono">AUTHENTICATION</text>
+        <text x="0" y="18" fill="#E2E8F0" font-size="10" class="font-mono">POST /api/auth/login</text>
+        <text x="0" y="36" fill="#E2E8F0" font-size="10" class="font-mono">POST /api/auth/register</text>
+        <text x="0" y="54" fill="#E2E8F0" font-size="10" class="font-mono">GET  /api/auth/me</text>
+
+        <text x="0" y="82" fill="#64748B" font-size="9" font-weight="700" class="font-mono">ROOMS &amp; LEADERBOARD</text>
+        <text x="0" y="100" fill="#E2E8F0" font-size="10" class="font-mono">GET  /api/rooms</text>
+        <text x="0" y="118" fill="#E2E8F0" font-size="10" class="font-mono">GET  /api/rooms/my-room</text>
+        <text x="0" y="136" fill="#E2E8F0" font-size="10" class="font-mono">GET  /api/leaderboard</text>
+        <text x="0" y="154" fill="#E2E8F0" font-size="10" class="font-mono">GET  /api/stats/me</text>
+
+        <text x="0" y="182" fill="#64748B" font-size="9" font-weight="700" class="font-mono">ADMIN METRICS</text>
+        <text x="0" y="200" fill="#E2E8F0" font-size="10" class="font-mono">GET  /api/admin/metrics</text>
+        <text x="0" y="218" fill="#E2E8F0" font-size="10" class="font-mono">DELETE /api/admin/room</text>
+        <text x="0" y="236" fill="#E2E8F0" font-size="10" class="font-mono">DELETE /api/admin/user</text>
+      </g>
+    </g>
+
+    <!-- Channel B: WebSocket Event Streams -->
+    <g transform="translate(0, 335)">
+      <rect x="0" y="0" width="220" height="615" rx="8" fill="#081420" stroke="#00F0FF" stroke-width="1.2" stroke-opacity="0.6" />
+      <text x="110" y="22" fill="#00F0FF" font-size="11" font-weight="700" text-anchor="middle" class="font-mono">WEBSOCKET (SOCKET.IO)</text>
+      <line x1="12" y1="32" x2="208" y2="32" stroke="#1E293B" stroke-width="1" />
+
+      <!-- Client to Server Events -->
+      <g transform="translate(12, 46)">
+        <rect x="0" y="0" width="196" height="20" rx="3" fill="#00F0FF" fill-opacity="0.12" />
+        <text x="8" y="14" fill="#38BDF8" font-size="9" font-weight="700" class="font-mono">CLIENT ➔ SERVER EVENTS</text>
+
+        <g transform="translate(4, 34)">
+          <text x="0" y="0" fill="#E2E8F0" font-size="10" font-weight="700" class="font-mono">game:input</text>
+          <text x="0" y="14" fill="#94A3B8" font-size="8" class="font-sans">Sequence + WASD Keys</text>
+
+          <text x="0" y="34" fill="#E2E8F0" font-size="10" font-weight="700" class="font-mono">room:create / join</text>
+          <text x="0" y="48" fill="#94A3B8" font-size="8" class="font-sans">6-char code / password</text>
+
+          <text x="0" y="68" fill="#E2E8F0" font-size="10" font-weight="700" class="font-mono">room:ready / leave / kick</text>
+          <text x="0" y="82" fill="#94A3B8" font-size="8" class="font-sans">Roster state toggles</text>
+
+          <text x="0" y="102" fill="#E2E8F0" font-size="10" font-weight="700" class="font-mono">game:start</text>
+          <text x="0" y="116" fill="#94A3B8" font-size="8" class="font-sans">Host trigger (min 2 players)</text>
+
+          <text x="0" y="136" fill="#E2E8F0" font-size="10" font-weight="700" class="font-mono">chat:send</text>
+          <text x="0" y="150" fill="#94A3B8" font-size="8" class="font-sans">Validated text message</text>
+
+          <text x="0" y="170" fill="#E2E8F0" font-size="10" font-weight="700" class="font-mono">reaction:click</text>
+          <text x="0" y="188" fill="#E2E8F0" font-size="10" font-weight="700" class="font-mono">territory:input</text>
+          <text x="0" y="206" fill="#E2E8F0" font-size="10" font-weight="700" class="font-mono">word:submit</text>
+        </g>
+      </g>
+
+      <!-- Server to Client Broadcasts -->
+      <g transform="translate(12, 335)">
+        <rect x="0" y="0" width="196" height="20" rx="3" fill="#8B5CF6" fill-opacity="0.18" />
+        <text x="8" y="14" fill="#C084FC" font-size="9" font-weight="700" class="font-mono">SERVER ➔ CLIENT EVENTS</text>
+
+        <g transform="translate(4, 34)">
+          <text x="0" y="0" fill="#00F0FF" font-size="10" font-weight="700" class="font-mono">game:state</text>
+          <text x="0" y="14" fill="#94A3B8" font-size="8" class="font-sans">60 FPS Room Snapshot</text>
+
+          <text x="0" y="34" fill="#E2E8F0" font-size="10" font-weight="700" class="font-mono">game:ended</text>
+          <text x="0" y="48" fill="#94A3B8" font-size="8" class="font-sans">MatchResult &amp; Standings</text>
+
+          <text x="0" y="68" fill="#E2E8F0" font-size="10" font-weight="700" class="font-mono">room:updated</text>
+          <text x="0" y="82" fill="#94A3B8" font-size="8" class="font-sans">Roster, ready states, host</text>
+
+          <text x="0" y="102" fill="#E2E8F0" font-size="10" font-weight="700" class="font-mono">chat:message</text>
+          <text x="0" y="116" fill="#94A3B8" font-size="8" class="font-sans">Room broadcasted message</text>
+
+          <text x="0" y="136" fill="#E2E8F0" font-size="10" font-weight="700" class="font-mono">system:online_count</text>
+          <text x="0" y="150" fill="#94A3B8" font-size="8" class="font-sans">Active socket connections</text>
+
+          <text x="0" y="170" fill="#34D399" font-size="10" font-weight="700" class="font-mono">progression:xp-earned</text>
+          <text x="0" y="184" fill="#94A3B8" font-size="8" class="font-sans">XP earned breakdown</text>
+
+          <text x="0" y="204" fill="#F59E0B" font-size="10" font-weight="700" class="font-mono">progression:level-up</text>
+          <text x="0" y="218" fill="#94A3B8" font-size="8" class="font-sans">Level tier threshold modal</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- Flow Direction Arrows between Left and Center -->
+  <line x1="475" y1="840" x2="525" y2="840" stroke="#00F0FF" stroke-width="2" marker-end="url(#arrow-cyan-1)" />
+  <line x1="525" y1="880" x2="475" y2="880" stroke="#C084FC" stroke-width="2" marker-end="url(#arrow-purple-1)" />
+
+  <!-- ==================== TIER 2: SERVER APPLICATION TIER ==================== -->
+  <g transform="translate(770, 182)">
+    <!-- Container -->
+    <rect x="0" y="0" width="770" height="950" rx="12" fill="url(#card-server-1)" stroke="#1E293B" stroke-width="1.5" filter="url(#drop-shadow-1)" />
+
+    <!-- Top Label Header -->
+    <rect x="16" y="14" width="738" height="40" rx="6" fill="#0F172A" stroke="#8B5CF6" stroke-width="1.2" stroke-opacity="0.3" />
+    <circle cx="34" cy="34" r="5" fill="#8B5CF6" />
+    <text x="48" y="39" fill="#FFFFFF" font-size="14" font-weight="800" letter-spacing="0.5" class="font-sans">SERVER APPLICATION &amp; ENGINE TIER</text>
+    <rect x="630" y="23" width="112" height="22" rx="4" fill="#8B5CF6" fill-opacity="0.15" />
+    <text x="686" y="38" fill="#C084FC" font-size="10" font-weight="700" text-anchor="middle" class="font-mono">RENDER HOST</text>
+
+    <!-- Sub-Block 1: Express Routers & Middleware -->
+    <g transform="translate(16, 68)">
+      <rect x="0" y="0" width="738" height="105" rx="8" fill="#0A0E18" stroke="#1E293B" stroke-width="1" />
+      <text x="14" y="22" fill="#38BDF8" font-size="11" font-weight="700" class="font-mono">EXPRESS 4 REST API &amp; SECURITY MIDDLEWARE (app.ts)</text>
+
+      <g transform="translate(14, 34)">
+        <rect x="0" y="0" width="135" height="58" rx="6" fill="#131D33" stroke="#253556" stroke-width="1" />
+        <text x="10" y="18" fill="#FFFFFF" font-size="11" font-weight="700" class="font-sans">auth.routes.ts</text>
+        <text x="10" y="34" fill="#94A3B8" font-size="9" class="font-mono">JWT Tokens</text>
+        <text x="10" y="48" fill="#64748B" font-size="9" class="font-mono">bcryptjs Hashes</text>
+
+        <rect x="145" y="0" width="135" height="58" rx="6" fill="#131D33" stroke="#253556" stroke-width="1" />
+        <text x="10" y="18" fill="#FFFFFF" font-size="11" font-weight="700" class="font-sans">room.routes.ts</text>
+        <text x="10" y="34" fill="#94A3B8" font-size="9" class="font-mono">List Rooms</text>
+        <text x="10" y="48" fill="#64748B" font-size="9" class="font-mono">Query My Room</text>
+
+        <rect x="290" y="0" width="135" height="58" rx="6" fill="#131D33" stroke="#253556" stroke-width="1" />
+        <text x="10" y="18" fill="#FFFFFF" font-size="11" font-weight="700" class="font-sans">leaderboard &amp; stats</text>
+        <text x="10" y="34" fill="#94A3B8" font-size="9" class="font-mono">XP Rankings</text>
+        <text x="10" y="48" fill="#64748B" font-size="9" class="font-mono">Player History</text>
+
+        <rect x="435" y="0" width="135" height="58" rx="6" fill="#131D33" stroke="#253556" stroke-width="1" />
+        <text x="10" y="18" fill="#FFFFFF" font-size="11" font-weight="700" class="font-sans">admin.routes.ts</text>
+        <text x="10" y="34" fill="#94A3B8" font-size="9" class="font-mono">Metrics API</text>
+        <text x="10" y="48" fill="#64748B" font-size="9" class="font-mono">Purge Tables</text>
+
+        <rect x="580" y="0" width="130" height="58" rx="6" fill="#16223B" stroke="#00F0FF" stroke-width="1" stroke-opacity="0.4" />
+        <text x="10" y="18" fill="#00F0FF" font-size="11" font-weight="700" class="font-sans">Middleware</text>
+        <text x="10" y="34" fill="#94A3B8" font-size="9" class="font-mono">• authenticateHttp</text>
+        <text x="10" y="48" fill="#94A3B8" font-size="9" class="font-mono">• Zod Validation</text>
+      </g>
+    </g>
+
+    <!-- Sub-Block 2: Socket.IO Server & Event Handlers -->
+    <g transform="translate(16, 185)">
+      <rect x="0" y="0" width="738" height="110" rx="8" fill="#0A0E18" stroke="#1E293B" stroke-width="1" />
+      <text x="14" y="22" fill="#00F0FF" font-size="11" font-weight="700" class="font-mono">SOCKET.IO PROTOCOL SERVER &amp; HANDLERS (index.ts / sockets/)</text>
+
+      <g transform="translate(14, 34)">
+        <rect x="0" y="0" width="170" height="62" rx="6" fill="#0F1F2F" stroke="#00F0FF" stroke-width="1" stroke-opacity="0.4" />
+        <text x="10" y="18" fill="#00F0FF" font-size="11" font-weight="700" class="font-sans">authenticateSocket</text>
+        <text x="10" y="34" fill="#E2E8F0" font-size="9" class="font-mono">• Handshake JWT check</text>
+        <text x="10" y="48" fill="#E2E8F0" font-size="9" class="font-mono">• Room: user:${id}</text>
+
+        <rect x="180" y="0" width="170" height="62" rx="6" fill="#131D33" stroke="#253556" stroke-width="1" />
+        <text x="10" y="18" fill="#FFFFFF" font-size="11" font-weight="700" class="font-sans">game.handlers.ts</text>
+        <text x="10" y="34" fill="#E2E8F0" font-size="9" class="font-mono">• game:start (min 2)</text>
+        <text x="10" y="48" fill="#E2E8F0" font-size="9" class="font-mono">• game:input (seq)</text>
+
+        <rect x="360" y="0" width="170" height="62" rx="6" fill="#131D33" stroke="#253556" stroke-width="1" />
+        <text x="10" y="18" fill="#FFFFFF" font-size="11" font-weight="700" class="font-sans">room.handlers.ts</text>
+        <text x="10" y="34" fill="#E2E8F0" font-size="9" class="font-mono">• room:create, join</text>
+        <text x="10" y="48" fill="#E2E8F0" font-size="9" class="font-mono">• room:ready, kick</text>
+
+        <rect x="540" y="0" width="170" height="62" rx="6" fill="#131D33" stroke="#253556" stroke-width="1" />
+        <text x="10" y="18" fill="#FFFFFF" font-size="11" font-weight="700" class="font-sans">chat.handlers.ts</text>
+        <text x="10" y="34" fill="#E2E8F0" font-size="9" class="font-mono">• Zod length &amp; rate limit</text>
+        <text x="10" y="48" fill="#E2E8F0" font-size="9" class="font-mono">• chat:message</text>
+      </g>
+    </g>
+
+    <!-- Sub-Block 3: In-Memory Orchestration & Singletons -->
+    <g transform="translate(16, 307)">
+      <rect x="0" y="0" width="738" height="155" rx="8" fill="#0A0E18" stroke="#1E293B" stroke-width="1" />
+      <text x="14" y="22" fill="#F59E0B" font-size="11" font-weight="700" class="font-mono">IN-MEMORY COORDINATION &amp; SINGLETON MANAGERS</text>
+
+      <g transform="translate(14, 34)">
+        <!-- RoomManager -->
+        <rect x="0" y="0" width="345" height="106" rx="6" fill="#1C180E" stroke="#F59E0B" stroke-width="1" stroke-opacity="0.4" />
+        <text x="12" y="20" fill="#FBBF24" font-size="12" font-weight="700" class="font-sans">RoomManager.ts (Room &amp; Roster Authority)</text>
+        <text x="12" y="40" fill="#E2E8F0" font-size="10" class="font-sans">• In-Memory Map: Map&lt;roomId, RoomInstance&gt;</text>
+        <text x="12" y="58" fill="#E2E8F0" font-size="10" class="font-sans">• Unique 6-character random alphanumeric join codes</text>
+        <text x="12" y="76" fill="#E2E8F0" font-size="10" class="font-sans">• Automatic host transfer on creator disconnection</text>
+        <text x="12" y="94" fill="#94A3B8" font-size="9" class="font-mono">• 20-second disconnect grace period before player eviction</text>
+
+        <!-- GameManager -->
+        <rect x="365" y="0" width="345" height="106" rx="6" fill="#1C180E" stroke="#F59E0B" stroke-width="1" stroke-opacity="0.4" />
+        <text x="12" y="20" fill="#FBBF24" font-size="12" font-weight="700" class="font-sans">GameManager.ts (Simulation &amp; Tick Loop)</text>
+        <text x="12" y="40" fill="#E2E8F0" font-size="10" class="font-sans">• Active Matches: Map&lt;roomId, { game, timer }&gt;</text>
+        <text x="12" y="58" fill="#E2E8F0" font-size="10" class="font-sans">• Fixed 60 FPS Scheduler: setInterval @ 16.667 ms</text>
+        <text x="12" y="76" fill="#E2E8F0" font-size="10" class="font-sans">• Delta Time: deltaSeconds = (now - lastTick) / 1000</text>
+        <text x="12" y="94" fill="#00F0FF" font-size="9" class="font-mono">• Room Broadcast: io.to(roomId).emit('game:state', snapshot)</text>
+      </g>
+    </g>
+
+    <!-- Sub-Block 4: Server-Authoritative Game Modes (2x2 Grid) -->
+    <g transform="translate(16, 474)">
+      <rect x="0" y="0" width="738" height="255" rx="8" fill="#0A0E18" stroke="#1E293B" stroke-width="1" />
+      <text x="14" y="22" fill="#A855F7" font-size="11" font-weight="700" class="font-mono">FOUR SERVER-AUTHORITATIVE GAME MODES (GameMode.ts)</text>
+
+      <g transform="translate(14, 34)">
+        <!-- Neon Dash -->
+        <rect x="0" y="0" width="345" height="98" rx="6" fill="#161226" stroke="#8B5CF6" stroke-width="1" stroke-opacity="0.5" />
+        <text x="12" y="18" fill="#C084FC" font-size="11" font-weight="700" class="font-sans">NeonDash.ts (2D Kinematics Arena)</text>
+        <text x="12" y="36" fill="#E2E8F0" font-size="10" class="font-sans">• 1600 × 900 Bounds Clamp • 360 px/s Speed</text>
+        <text x="12" y="52" fill="#E2E8F0" font-size="10" class="font-sans">• 0.7071 Diagonal Vector Normalization</text>
+        <text x="12" y="68" fill="#E2E8F0" font-size="10" class="font-sans">• 5 Static AABB Obstacles • Monotonic Sequence Filter</text>
+        <text x="12" y="86" fill="#38BDF8" font-size="9" class="font-mono">• 3 Collectible Tiers: +10 (Cyan), +50 (Amber), +100 (Purple)</text>
+
+        <!-- Reaction Rush -->
+        <rect x="365" y="0" width="345" height="98" rx="6" fill="#161226" stroke="#8B5CF6" stroke-width="1" stroke-opacity="0.4" />
+        <text x="12" y="18" fill="#C084FC" font-size="11" font-weight="700" class="font-sans">ReactionRush.ts (Reflex Trial)</text>
+        <text x="12" y="36" fill="#E2E8F0" font-size="10" class="font-sans">• 10 Consecutive Competitive Rounds</text>
+        <text x="12" y="52" fill="#E2E8F0" font-size="10" class="font-sans">• Random ARMED Jitter (1.5s - 4.5s) Anti-Cheat</text>
+        <text x="12" y="68" fill="#E2E8F0" font-size="10" class="font-sans">• Immediate False-Start Penalty &amp; Round Lockout</text>
+        <text x="12" y="86" fill="#00F0FF" font-size="9" class="font-mono">• Sub-ms verified server reaction latency timestamping</text>
+
+        <!-- Territory -->
+        <rect x="0" y="108" width="345" height="98" rx="6" fill="#161226" stroke="#8B5CF6" stroke-width="1" stroke-opacity="0.4" />
+        <text x="12" y="18" fill="#C084FC" font-size="11" font-weight="700" class="font-sans">Territory.ts (Spatial Grid Conquest)</text>
+        <text x="12" y="36" fill="#E2E8F0" font-size="10" class="font-sans">• 10 × 10 (100 Cells) Spatial State Matrix</text>
+        <text x="12" y="52" fill="#E2E8F0" font-size="10" class="font-sans">• 3.0-Second Hold Capture Progress per Cell</text>
+        <text x="12" y="68" fill="#E2E8F0" font-size="10" class="font-sans">• Contested Territory Arbitration Pauses Progress</text>
+        <text x="12" y="86" fill="#34D399" font-size="9" class="font-mono">• Passive Score Accumulator (+1 pt/cell/sec) • 5-min Match</text>
+
+        <!-- Word Blitz -->
+        <rect x="365" y="108" width="345" height="98" rx="6" fill="#161226" stroke="#8B5CF6" stroke-width="1" stroke-opacity="0.4" />
+        <text x="12" y="18" fill="#C084FC" font-size="11" font-weight="700" class="font-sans">WordBlitz.ts (Typing Racing Engine)</text>
+        <text x="12" y="36" fill="#E2E8F0" font-size="10" class="font-sans">• 10 Rounds with 15-Word Curated Gaming Dictionary</text>
+        <text x="12" y="52" fill="#E2E8F0" font-size="10" class="font-sans">• Case-Insensitive Normalized String Verification</text>
+        <text x="12" y="68" fill="#E2E8F0" font-size="10" class="font-sans">• First-Correct Participant Speed Bonus (+150 pts)</text>
+        <text x="12" y="86" fill="#FBBF24" font-size="9" class="font-mono">• 10s Round Timer with Automated 2s Intermission</text>
+      </g>
+    </g>
+
+    <!-- Sub-Block 5: Data Persistence & PostgreSQL -->
+    <g transform="translate(16, 741)">
+      <rect x="0" y="0" width="738" height="193" rx="8" fill="#0C101E" stroke="#8B5CF6" stroke-width="1.2" stroke-opacity="0.4" />
+      <text x="14" y="22" fill="#C084FC" font-size="11" font-weight="700" class="font-mono">DATA PERSISTENCE &amp; PRISMA ORM 5 (POSTGRESQL)</text>
+
+      <g transform="translate(14, 34)">
+        <!-- MatchService -->
+        <rect x="0" y="0" width="345" height="144" rx="6" fill="#12162B" stroke="#8B5CF6" stroke-width="1" stroke-opacity="0.3" />
+        <text x="12" y="18" fill="#A855F7" font-size="11" font-weight="700" class="font-sans">MatchService.ts &amp; XPService.ts</text>
+        <text x="12" y="36" fill="#E2E8F0" font-size="10" class="font-sans">• Anti-Abuse Deduplication: skips duplicate matchId</text>
+        <text x="12" y="52" fill="#E2E8F0" font-size="10" class="font-sans">• XP Breakdown: Completion (50) + Placement (250/150)</text>
+        <text x="12" y="68" fill="#E2E8F0" font-size="10" class="font-sans">• Performance Multiplier: Math.round(score * 0.1) + Daily (100)</text>
+        <text x="12" y="84" fill="#E2E8F0" font-size="10" class="font-sans">• Progression Math: calculateLevelInfo() &amp; Title Tiers</text>
+        <text x="12" y="102" fill="#00F0FF" font-size="9" class="font-mono">• Atomic Transaction: prisma.$transaction(async (tx))</text>
+        <text x="12" y="118" fill="#34D399" font-size="9" class="font-mono">• Broadcasts: progression:xp-earned &amp; level-up</text>
+        <text x="12" y="132" fill="#94A3B8" font-size="9" class="font-mono">• Non-blocking async persistence maintains 60 FPS</text>
+
+        <!-- Prisma Models -->
+        <rect x="365" y="0" width="345" height="144" rx="6" fill="#12162B" stroke="#00F0FF" stroke-width="1" stroke-opacity="0.3" />
+        <text x="12" y="18" fill="#38BDF8" font-size="11" font-weight="700" class="font-sans">Prisma Schema ➔ PostgreSQL (Neon)</text>
+        <text x="12" y="36" fill="#E2E8F0" font-size="10" class="font-sans">• User: id, username, email, passwordHash, avatar, role</text>
+        <text x="12" y="52" fill="#E2E8F0" font-size="10" class="font-sans">• PlayerStats: level, xp, lifetimeXp, title, wins, games</text>
+        <text x="12" y="68" fill="#E2E8F0" font-size="10" class="font-sans">• XPTransaction: audit log (MATCH_COMPLETION, etc.)</text>
+        <text x="12" y="84" fill="#E2E8F0" font-size="10" class="font-sans">• Match &amp; MatchParticipant: matchId, userId, score, rank</text>
+        <text x="12" y="102" fill="#E2E8F0" font-size="10" class="font-sans">• Room: code, name, hostId, gameType, status, isPrivate</text>
+        <text x="12" y="118" fill="#E2E8F0" font-size="10" class="font-sans">• Message: persistent in-room chat history</text>
+        <text x="12" y="132" fill="#94A3B8" font-size="9" class="font-mono">• Hosted on Neon PostgreSQL with Connection Pooling</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Flow Direction Arrows between Center and Right -->
+  <line x1="745" y1="380" x2="770" y2="380" stroke="#10B981" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow-green-1)" />
+  <line x1="745" y1="580" x2="770" y2="580" stroke="#00F0FF" stroke-width="2" marker-end="url(#arrow-cyan-1)" />
+  <line x1="770" y1="620" x2="745" y2="620" stroke="#C084FC" stroke-width="2" marker-end="url(#arrow-purple-1)" />
+
+  <!-- ==================== FOOTER ==================== -->
+  <g transform="translate(60, 1148)">
+    <rect x="0" y="0" width="1480" height="32" rx="6" fill="#090D16" stroke="#1E293B" stroke-width="1" />
+    <text x="24" y="20" fill="#64748B" font-size="10" font-weight="700" class="font-mono">ARCHITECTURAL HIGHLIGHTS:</text>
+    <text x="200" y="20" fill="#E2E8F0" font-size="11" class="font-sans">100% Server-Authoritative 60 FPS Physics</text>
+    <circle cx="475" cy="16" r="2.5" fill="#334155" />
+    <text x="490" y="20" fill="#E2E8F0" font-size="11" class="font-sans">Zero React State Re-render Overhead on Game Loop</text>
+    <circle cx="830" cy="16" r="2.5" fill="#334155" />
+    <text x="845" y="20" fill="#E2E8F0" font-size="11" class="font-sans">Atomic Prisma Transaction for Match &amp; XP Audits</text>
+    <circle cx="1185" cy="16" r="2.5" fill="#334155" />
+    <text x="1200" y="20" fill="#00F0FF" font-size="11" font-weight="600" class="font-mono">Decoupled Netlify + Render Deployments</text>
+  </g>
+</svg>

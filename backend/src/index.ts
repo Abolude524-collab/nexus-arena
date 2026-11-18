@@ -7,6 +7,7 @@ import { authenticateSocket, AuthenticatedSocket } from './middleware/auth.middl
 import { registerRoomHandlers } from './sockets/room.handlers.js';
 import { registerChatHandlers } from './sockets/chat.handlers.js';
 import { registerGameHandlers } from './sockets/game.handlers.js';
+import { registerSpectatorHandlers } from './sockets/spectator.handlers.js';
 import { gameManager } from './game/GameManager.js';
 import { seedAdminUser } from './db/seed.js';
 
@@ -43,8 +44,18 @@ import { setIoInstance } from './sockets/socketServer.js';
 gameManager.setSocketServer(io as any);
 setIoInstance(io as any);
 
-// Authenticate all socket handshakes
+// Authenticate all socket handshakes. Anonymous connections are accepted as guests
+// so that watching never requires an account; player handlers ignore them.
 io.use(authenticateSocket);
+
+/** Guests watch, but they are never counted as online players. */
+const connectedPlayerCount = (): number => {
+  let count = 0;
+  for (const client of io.sockets.sockets.values()) {
+    if ((client.data as { user?: unknown }).user) count += 1;
+  }
+  return count;
+};
 
 io.on('connection', (socket) => {
   const authSocket = socket as AuthenticatedSocket;
@@ -54,19 +65,24 @@ io.on('connection', (socket) => {
     socket.join(`user:${user.userId}`);
   }
 
-  console.log(`[Socket] Authenticated connection: ${user?.username} (${socket.id})`);
+  console.log(
+    user?.username
+      ? `[Socket] Authenticated connection: ${user.username} (${socket.id})`
+      : `[Socket] Guest connection: ${authSocket.data.guest?.label ?? 'unknown'} (${socket.id})`,
+  );
 
   // Broadcast updated real-time online players count
-  io.emit('system:online_count', { count: io.sockets.sockets.size });
+  io.emit('system:online_count', { count: connectedPlayerCount() });
 
   registerRoomHandlers(io as any, authSocket);
   registerChatHandlers(io as any, authSocket);
   registerGameHandlers(io as any, authSocket);
+  registerSpectatorHandlers(io as any, authSocket);
 
   socket.on('disconnect', () => {
-    console.log(`[Socket] Disconnected: ${user?.username} (${socket.id})`);
+    console.log(`[Socket] Disconnected: ${user?.username ?? 'guest'} (${socket.id})`);
     setTimeout(() => {
-      io.emit('system:online_count', { count: io.sockets.sockets.size });
+      io.emit('system:online_count', { count: connectedPlayerCount() });
     }, 100);
   });
 });

@@ -4,6 +4,7 @@ import { useRoomStore } from '../../store/roomStore';
 import { useAuthStore } from '../../store/authStore';
 import { useGameStore } from '../../store/gameStore';
 import { ChatPanel } from '../chat/ChatPanel';
+import { SpectatorControls } from './SpectatorControls';
 import { GameView } from '../game/GameView';
 
 export const WaitingRoomView: React.FC = () => {
@@ -39,13 +40,21 @@ export const WaitingRoomView: React.FC = () => {
       {/* Room Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 rounded-card bg-nexus-surface border border-nexus-border">
         <div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <h1 className="font-heading text-3xl font-extrabold text-white tracking-wider">
               {currentRoom.name}
             </h1>
             <span className="px-3 py-1 rounded-full bg-nexus-accent/20 border border-nexus-accent/40 text-nexus-accent font-mono text-xs uppercase font-bold">
               {currentRoom.gameType}
             </span>
+            <span className="px-3 py-1 rounded-full bg-nexus-card border border-nexus-border text-nexus-muted font-mono text-[10px] uppercase font-bold">
+              {currentRoom.visibility}
+            </span>
+            {currentRoom.allowSpectators && (
+              <span className="px-3 py-1 rounded-full bg-nexus-cyan/10 border border-nexus-cyan/40 text-nexus-cyan font-mono text-[10px] uppercase font-bold">
+                {currentRoom.spectatorCount} WATCHING
+              </span>
+            )}
           </div>
           <p className="text-nexus-muted text-sm mt-1">
             Waiting area • {currentRoom.players.length} / {currentRoom.maxPlayers} Players Joined
@@ -175,6 +184,7 @@ export const WaitingRoomView: React.FC = () => {
 
         {/* Sidebar Info & Room Chat */}
         <div className="space-y-6">
+          <SpectatorControls />
           <ChatPanel />
 
           <div className="bg-nexus-surface border border-nexus-border rounded-card p-6 space-y-4">

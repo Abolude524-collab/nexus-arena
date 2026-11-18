@@ -1,4 +1,4 @@
-import { PlayerInput, MatchResult } from '../shared/index.js';
+import { PlayerInput, MatchResult, SpectatorGameState } from '../shared/index.js';
 
 export interface GamePlayerInit {
   id: string;
@@ -10,6 +10,8 @@ export interface GameMode {
   update(deltaSeconds: number): void;
   handleInput(userId: string, input: PlayerInput): void;
   getState(): any;
+  /** Spectator-safe projection of the authoritative state. Never leaks hidden data. */
+  getSpectatorState(): SpectatorGameState;
   isFinished(): boolean;
   getResults(): MatchResult;
 }

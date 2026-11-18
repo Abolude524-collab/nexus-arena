@@ -1,3 +1,5 @@
+import { SpectatorRoomInfo } from './room.js';
+
 export interface PlayerInput {
   up: boolean;
   down: boolean;
@@ -175,4 +177,71 @@ export interface WordBlitzGameState {
   startedAt: number;
   endsAt: number;
   players: WordBlitzPlayerState[];
+}
+
+// ------------------------------------------------------------------
+// WATCH / SPECTATOR TYPES
+// ------------------------------------------------------------------
+
+/** Stable identifiers for game filters. Never use display labels for filtering. */
+export const GAME_TYPE_IDS: Record<string, string> = {
+  'Neon Dash': 'neon-dash',
+  'Reaction Rush': 'reaction-rush',
+  Territory: 'territory',
+  'Word Blitz': 'word-blitz',
+};
+
+export const GAME_ID_TO_TYPE: Record<string, string> = Object.entries(GAME_TYPE_IDS).reduce(
+  (acc, [type, id]) => {
+    acc[id] = type;
+    return acc;
+  },
+  {} as Record<string, string>,
+);
+
+export const GAME_TYPES: string[] = Object.keys(GAME_TYPE_IDS);
+
+export const getGameId = (gameType: string): string => GAME_TYPE_IDS[gameType] || 'unknown';
+
+export const SPECTATOR_DEFAULT_LIMIT = 50;
+
+/** Server-built, spectator-safe game snapshot. Sensitive fields are removed server-side. */
+export interface SpectatorGameState {
+  roomId: string;
+  gameType: string;
+  status: string;
+  serverTime: number;
+  state: Record<string, any>;
+}
+
+export interface SpectatorMatchEndedPayload {
+  roomId: string;
+  cancelled: boolean;
+  results: MatchResult | null;
+}
+
+export interface SpectatorCountUpdate {
+  roomId: string;
+  spectatorCount: number;
+  spectatorLimit: number;
+}
+
+/**
+ * The spectator session's own capabilities, decided by the server.
+ * Guests can watch everything public but cannot chat, follow, or earn rewards.
+ */
+export interface SpectatorViewerInfo {
+  isGuest: boolean;
+  canChat: boolean;
+  canFollow: boolean;
+  /** Ephemeral server handle for this viewing session. Never a user id. */
+  viewerHandle: string;
+}
+
+export interface SpectatorJoinedPayload {
+  room: SpectatorRoomInfo;
+  spectatorCount: number;
+  spectatorLimit: number;
+  snapshot: SpectatorGameState | null;
+  viewer: SpectatorViewerInfo;
 }
