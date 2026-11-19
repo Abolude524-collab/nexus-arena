@@ -98,9 +98,22 @@ export const useRoomStore = create<RoomState>((set, get) => ({
         set({ currentRoom: updatedRoom });
       }
 
-      set((state) => ({
-        rooms: state.rooms.map((r) => (r.id === updatedRoom.id ? updatedRoom : r)),
-      }));
+      // Public room updates are broadcast platform-wide, so an unknown id is a room
+      // someone else just created: it has to be added, otherwise the lobby only ever
+      // shows what was fetched on page load. Closed/finished rooms arrive as bare
+      // tombstones and leave the list.
+      set((state) => {
+        if (updatedRoom.status === 'CLOSED' || updatedRoom.status === 'FINISHED') {
+          return { rooms: state.rooms.filter((r) => r.id !== updatedRoom.id) };
+        }
+
+        const known = state.rooms.some((r) => r.id === updatedRoom.id);
+        return {
+          rooms: known
+            ? state.rooms.map((r) => (r.id === updatedRoom.id ? updatedRoom : r))
+            : [...state.rooms, updatedRoom],
+        };
+      });
     });
 
     socket.on('room:player_joined', ({ room }) => {

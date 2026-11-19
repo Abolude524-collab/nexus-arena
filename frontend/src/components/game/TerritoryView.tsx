@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Shield, Clock, Trophy, Gamepad2 } from 'lucide-react';
+import { Shield, Clock, Trophy, Gamepad2, LogOut } from 'lucide-react';
 import { TerritoryGameState } from '../../shared/index.js';
 import { socketService } from '../../services/socket.service';
 import { useAuthStore } from '../../store/authStore';
@@ -7,9 +7,10 @@ import { VirtualDPad } from './VirtualDPad';
 
 interface TerritoryViewProps {
   gameState: TerritoryGameState;
+  onQuit: () => void;
 }
 
-export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
+export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState, onQuit }) => {
   const { user } = useAuthStore();
   const myPlayer = gameState.players.find((p) => p.id === user?.id);
 
@@ -108,39 +109,50 @@ export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-nexus-bg flex flex-col justify-between p-2 md:p-4 overflow-hidden selection:bg-none font-sans">
-      {/* Top HUD */}
-      <div className="flex items-center justify-between bg-nexus-surface/90 border border-nexus-border backdrop-blur px-3 md:px-6 py-2 md:py-3 rounded-card z-10 shrink-0">
-        <div className="flex items-center gap-3 md:gap-6">
-          <div className="font-heading font-extrabold text-base md:text-xl text-white tracking-wider flex items-center gap-1.5">
-            <Shield className="w-5 h-5 md:w-6 md:h-6 text-nexus-accent animate-pulse" />
+      {/* Top HUD — wraps to a second row on narrow phones instead of overflowing */}
+      <div className="flex flex-wrap items-center justify-between gap-2 bg-nexus-surface/90 border border-nexus-border backdrop-blur px-2 sm:px-6 py-2 md:py-3 rounded-card z-10 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-6 min-w-0">
+          <div className="font-heading font-extrabold text-sm sm:text-xl text-white tracking-wider flex items-center gap-1.5 shrink-0">
+            <Shield className="w-4 h-4 sm:w-6 sm:h-6 text-nexus-accent animate-pulse" />
             <span className="text-nexus-accent">TERRITORY</span> CLASH
           </div>
-          <div className="flex items-center gap-1.5 md:gap-2 font-mono text-xs md:text-sm bg-nexus-card px-2.5 md:px-3 py-1 md:py-1.5 rounded-btn border border-nexus-border">
+          <div className="flex items-center gap-1.5 md:gap-2 font-mono text-[11px] sm:text-sm bg-nexus-card px-2 sm:px-3 py-1 md:py-1.5 rounded-btn border border-nexus-border shrink-0">
             <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-nexus-cyan" />
             <span className="text-nexus-muted hidden sm:inline">TIME:</span>
             <span className="text-white font-bold">{timerStr}</span>
           </div>
         </div>
 
-        {/* Player Stats */}
-        <div className="flex items-center gap-2 md:gap-4">
-          <div className="hidden sm:flex items-center gap-2 bg-nexus-card px-3 md:px-4 py-1 md:py-1.5 rounded-btn border border-nexus-border font-mono text-xs">
+        {/* Player Stats + quit */}
+        <div className="flex items-center gap-2 md:gap-4 ml-auto">
+          <div className="hidden md:flex items-center gap-2 bg-nexus-card px-3 md:px-4 py-1 md:py-1.5 rounded-btn border border-nexus-border font-mono text-xs">
             <span className="text-nexus-muted">CONTROLLED:</span>
             <span className="text-nexus-cyan font-bold text-sm md:text-base">{myPlayer?.territoriesControlled || 0} CELLS</span>
           </div>
-          <div className="flex items-center gap-1.5 md:gap-2 bg-nexus-card px-3 md:px-5 py-1 md:py-1.5 rounded-btn border border-nexus-accent glow-accent font-mono">
-            <Trophy className="w-4 h-4 md:w-5 md:h-5 text-amber-400" />
+          <div className="flex items-center gap-1.5 md:gap-2 bg-nexus-card px-2.5 sm:px-5 py-1 md:py-1.5 rounded-btn border border-nexus-accent glow-accent font-mono">
+            <Trophy className="w-4 h-4 md:w-5 md:h-5 text-amber-400 hidden sm:block" />
             <span className="text-nexus-muted text-[10px] md:text-xs hidden sm:inline">YOUR SCORE:</span>
-            <span className="text-white font-heading font-extrabold text-lg md:text-2xl">
+            <span className="text-white font-heading font-extrabold text-base sm:text-2xl">
               {myPlayer?.score || 0}
             </span>
           </div>
+          <button
+            type="button"
+            onClick={onQuit}
+            aria-label="Quit match"
+            className="flex items-center gap-1 px-2 min-h-6 sm:px-3 sm:py-1.5 rounded-btn bg-nexus-card border border-nexus-border hover:border-nexus-danger/60 hover:text-nexus-danger text-nexus-muted font-heading text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer shrink-0"
+          >
+            <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">QUIT</span>
+          </button>
         </div>
       </div>
 
-      {/* Main 10x10 Spatial Grid Container - min-h-0 prevents flex overflow */}
-      <div className="flex-1 min-h-0 relative flex items-center justify-center my-1 md:my-2 overflow-hidden">
-        <div className="relative aspect-square h-full max-h-full rounded-card border-2 border-nexus-border bg-nexus-surface p-2 shadow-2xl grid grid-cols-10 grid-rows-10 gap-1.5">
+      {/* Main 10x10 Spatial Grid Container - min-h-0 prevents flex overflow.
+          On phones the grid is sized from the viewport width so it can never
+          overflow sideways, and the leaderboard moves above it. */}
+      <div className="flex-1 min-h-0 relative flex flex-col sm:flex-row items-center justify-center gap-1.5 my-1 md:my-2 overflow-hidden">
+        <div className="relative aspect-square w-[min(100%,calc(100dvh-13rem))] sm:w-auto sm:h-full max-w-full max-h-full rounded-card border-2 border-nexus-border bg-nexus-surface p-1.5 sm:p-2 shadow-2xl grid grid-cols-10 grid-rows-10 gap-1 sm:gap-1.5">
           {gameState.cells.map((cell) => {
             const owner = gameState.players.find((p) => p.id === cell.ownerId);
             const isContested = cell.state === 'CONTESTED';
@@ -182,7 +194,7 @@ export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
                       <div
                         key={p.id}
                         style={{ backgroundColor: p.color }}
-                        className="w-5 h-5 rounded-full border-2 border-white flex items-center justify-center font-heading font-extrabold text-[9px] text-white shadow-lg glow-accent"
+                        className="w-3.5 h-3.5 sm:w-5 sm:h-5 rounded-full border-2 border-white flex items-center justify-center font-heading font-extrabold text-[7px] sm:text-[9px] text-white shadow-lg glow-accent"
                         title={p.username}
                       >
                         {p.username.substring(0, 1).toUpperCase()}
@@ -194,9 +206,10 @@ export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
           })}
         </div>
 
-        {/* Side Scoreboard */}
-        <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-nexus-surface/90 border border-nexus-border backdrop-blur rounded-btn p-2 md:p-3 font-mono text-[11px] md:text-xs space-y-1.5 md:space-y-2 min-w-[130px] md:min-w-[170px] shadow-lg">
-          <div className="text-[9px] md:text-[10px] text-nexus-muted uppercase font-heading font-bold border-b border-nexus-border pb-1">
+        {/* Leaderboard: floating panel on desktop, an inline strip above the grid
+            on phones so it never covers the play field. */}
+        <div className="order-first sm:order-none w-full max-w-md sm:w-auto sm:absolute sm:top-4 sm:right-4 bg-nexus-surface/90 border border-nexus-border backdrop-blur rounded-btn p-2 md:p-3 font-mono text-[11px] md:text-xs flex flex-wrap justify-center gap-x-3 gap-y-1 sm:flex-col sm:justify-start sm:gap-y-2 sm:min-w-[130px] md:min-w-[170px] shadow-lg">
+          <div className="hidden sm:block text-[9px] md:text-[10px] text-nexus-muted uppercase font-heading font-bold border-b border-nexus-border pb-1">
             LEADERBOARD
           </div>
           {sortedPlayers.map((p, idx) => (
@@ -240,7 +253,7 @@ export const TerritoryView: React.FC<TerritoryViewProps> = ({ gameState }) => {
             🎮 D-PAD: {showDpad ? 'ON' : 'OFF'}
           </button>
         </div>
-        <div className="text-[10px] md:text-xs">
+        <div className="hidden sm:block text-[10px] md:text-xs">
           SCORING: <span className="text-nexus-cyan">CAPTURE (+100)</span> • <span className="text-nexus-accent">CONTROL (+10/s)</span>
         </div>
       </div>

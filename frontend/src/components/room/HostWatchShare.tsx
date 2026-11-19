@@ -49,7 +49,7 @@ export const HostWatchShare: React.FC = () => {
   };
 
   return (
-    <div className="fixed top-1.5 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-1.5 sm:gap-2 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-full bg-nexus-surface/95 border border-nexus-border backdrop-blur shadow-xl font-mono text-[9px] sm:text-[10px] max-w-[94vw]">
+    <div className="fixed top-14 sm:top-1.5 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-1.5 sm:gap-2 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-full bg-nexus-surface/95 border border-nexus-border backdrop-blur shadow-xl font-mono text-[9px] sm:text-[10px] max-w-[94vw]">
       <Eye className="w-3 h-3 shrink-0 text-nexus-accent" />
       <span className="text-nexus-muted whitespace-nowrap shrink-0">
         <span className="text-white font-bold">{currentRoom.spectatorCount}</span>
