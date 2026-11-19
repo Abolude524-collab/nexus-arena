@@ -5,6 +5,11 @@ import { useAuthStore } from './authStore';
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:4000';
 
+// A socket whose handler is not registered (a guest session, for example) never
+// answers an acknowledgement, so an unbounded wait would leave the room modal
+// spinning forever with no way out.
+const ROOM_ACK_TIMEOUT_MS = 10_000;
+
 interface RoomState {
   currentRoom: RoomDTO | null;
   rooms: RoomDTO[];
@@ -132,7 +137,21 @@ export const useRoomStore = create<RoomState>((set, get) => ({
       }
 
       set({ isLoading: true, error: null });
+
+      let settled = false;
+      const timeout = setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        const message = 'The server did not answer. Reconnecting — please try again.';
+        set({ isLoading: false, error: message });
+        reject(new Error(message));
+      }, ROOM_ACK_TIMEOUT_MS);
+
       socket.emit('room:create', input, (res) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeout);
+
         set({ isLoading: false });
         if (res.success && res.room) {
           set({ currentRoom: res.room });
@@ -155,7 +174,21 @@ export const useRoomStore = create<RoomState>((set, get) => ({
       }
 
       set({ isLoading: true, error: null });
+
+      let settled = false;
+      const timeout = setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        const message = 'The server did not answer. Reconnecting — please try again.';
+        set({ isLoading: false, error: message });
+        reject(new Error(message));
+      }, ROOM_ACK_TIMEOUT_MS);
+
       socket.emit('room:join', { roomIdOrCode, password }, (res) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeout);
+
         set({ isLoading: false });
         if (res.success && res.room) {
           set({ currentRoom: res.room });

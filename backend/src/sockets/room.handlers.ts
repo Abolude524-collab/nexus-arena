@@ -9,6 +9,9 @@ export const registerRoomHandlers = (io: Server, socket: AuthenticatedSocket): v
   const user = socket.data.user;
 
   if (!user) {
+    // No player handler is registered at all for spectators: the absence of
+    // room:create/room:join is the guarantee, not an error reply. Clients must
+    // therefore treat a missing acknowledgement as a failure rather than waiting.
     return;
   }
 

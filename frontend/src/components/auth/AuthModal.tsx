@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { X, Lock, Mail, User as UserIcon, ShieldAlert, Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 
@@ -20,6 +20,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [showPassword, setShowPassword] = useState(false);
 
   const { login, register, isLoading, error, clearError } = useAuthStore();
+
+  // The modal stays mounted while closed, so the requested mode has to be applied
+  // on every open. Initialising it once means a later "Register" click would still
+  // show the login form.
+  useEffect(() => {
+    if (isOpen) {
+      setMode(initialMode);
+    }
+  }, [isOpen, initialMode]);
 
   if (!isOpen) return null;
 

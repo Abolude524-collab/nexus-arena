@@ -16,7 +16,10 @@ class SocketService {
    * re-resolve the viewer, while existing listeners stay attached.
    */
   public connect(token?: string | null): ArenaSocket {
-    const nextToken = token ?? null;
+    // `undefined` keeps whatever identity the channel already has: components that
+    // only need a live socket must never downgrade an authenticated session to a
+    // guest by omission. Pass `null` explicitly to drop back to guest.
+    const nextToken = token === undefined ? this.token : token;
 
     if (this.socket && this.token === nextToken) {
       if (!this.socket.connected) {

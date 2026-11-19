@@ -455,7 +455,7 @@ export const App: React.FC = () => {
                             {isAuthenticated || Boolean(localStorage.getItem('nexus_token')) ? 'ENTER LOBBY' : 'PLAY NOW'}
                           </button>
                           <a
-                            href="https://github.com"
+                            href="https://github.com/Abolude524-collab"
                             target="_blank"
                             rel="noreferrer"
                             className="px-8 py-3.5 rounded-btn bg-nexus-card hover:bg-nexus-surface border border-nexus-border text-white font-heading font-semibold text-base uppercase tracking-wider transition-all flex items-center gap-3"

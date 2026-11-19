@@ -12,6 +12,7 @@ const MAX_VISIBLE = 3;
 export const MatchLiveNotifications: React.FC = () => {
   const navigate = useNavigate();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const token = useAuthStore((state) => state.token);
   const [alerts, setAlerts] = useState<MatchLiveNotification[]>([]);
 
   useEffect(() => {
@@ -20,7 +21,9 @@ export const MatchLiveNotifications: React.FC = () => {
       return;
     }
 
-    const socket = socketService.connect();
+    // Alerts ride the follower's own authenticated session, so the token is passed
+    // explicitly rather than relying on whatever identity the channel holds.
+    const socket = socketService.connect(token);
     const handleMatchLive = (payload: MatchLiveNotification) => {
       if (!payload?.roomId) return;
       setAlerts((previous) => {
@@ -33,7 +36,7 @@ export const MatchLiveNotifications: React.FC = () => {
     return () => {
       socket.off('notification:match_live', handleMatchLive);
     };
-  }, [isAuthenticated]);
+  }, [isAuthenticated, token]);
 
   useEffect(() => {
     if (alerts.length === 0) return;
